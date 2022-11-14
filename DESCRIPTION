@@ -1,5 +1,5 @@
 Package: rscistree
-Title: Maximum-Likelilihood Phylogeny using Noisy Genotypes
+Title: Maximum-Likelilihood Phylogeny Using Noisy Genotypes
 URL: https://github.com/kharchenkolab/rscistree
 Version: 1.0.0
 Authors@R: c(person("Teng","Gao", email="tgao@g.harvard.edu", role=c("cre", "aut")), person("Evan", "Biederstedt", email="evan.biederstedt@gmail.com", role="aut"), person("Peter", "Kharchenko", email = "peter_kharchenko@hms.harvard.edu", role = "aut"))

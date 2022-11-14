@@ -1,8 +1,9 @@
 #' @import dplyr
 #' @importFrom phangorn upgma 
-#' @importFrom ape root drop.tip reorder nj
+#' @importFrom ape root drop.tip nj
 #' @importFrom parallelDist parDist
 #' @useDynLib rscistree
+NULL
 
 #' Run the scistree workflow
 #' @param P matrix Genotype probability matrix (cell x mutation). Each entry is a probability (0-1) that the locus is wildtype

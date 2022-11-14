@@ -4,94 +4,6 @@
 using namespace Rcpp;
 using namespace RcppParallel;
 
-// [[Rcpp::export]]
-arma::mat CgetQ(arma::mat logQ, std::vector<std::vector<int>> children_dict, arma::Col<int> node_order){
-
-    int n = node_order.n_rows;
-    std::vector<int> children;
-
-    for (int i = 0; i < n; ++i) {
-        int node = node_order(i);
-        children = children_dict[node-1];
-        logQ.row(node-1) = logQ.row(children[0]-1) + logQ.row(children[1]-1);
-    }
-
-    return logQ;
-}
-
-// [[Rcpp::export]]
-double score_tree_cpp(const arma::Mat<int> E, const arma::mat P) {
-
-    int n = P.n_rows;
-    int m = P.n_cols;
-
-    arma::mat logQ(n * 2 - 1, m);
-
-    arma::mat logP_0 = log(P);
-    arma::mat logP_1 = log(1-P);
-
-    logQ.rows(0, n-1) = logP_1 - logP_0;
-
-    arma::Col<int> node_order(E.n_rows + 1);
-    node_order.rows(0,E.n_rows-1) = E.col(1);
-    node_order(E.n_rows) = n+1;
-    arma::uvec ids = find(node_order > n);
-    node_order = node_order.elem(ids);
-
-    std::vector<std::vector<int>> children_dict = allChildrenCPP(E);
-
-    logQ = CgetQ(logQ, children_dict, node_order);
-
-    double l = 0;
-
-    for (int i = 0; i < m; ++i) {
-        l += max(logQ.col(i)) + sum(logP_0.col(i));
-    }
-
-    return l;
-}
-
-
-struct score_neighbours : public Worker {
-
-    // original tree
-    const arma::Mat<int> E;
-    
-    const arma::mat P;
-
-    RVector<double> scores;
-
-    // initialize with source and destination
-    score_neighbours(const arma::Mat<int> E, const arma::mat P, NumericVector scores): 
-        E(E), P(P), scores(scores) {}
-
-    void operator()(std::size_t begin, std::size_t end) {
-        for (std::size_t i = begin; i < end; i++) {
-            std::vector<arma::Mat<int>> trees = nnin_cpp(E, i+1);
-            scores[2*i] = score_tree_cpp(trees[0], P);
-            scores[2*i+1] = score_tree_cpp(trees[1], P);
-        }
-    }
-};
-
-// [[Rcpp::export]]
-NumericVector nni_cpp_parallel(const List tree, arma::mat P) {
-    
-    arma::Mat<int> E = tree["edge"];
-
-    int n = E.n_rows/2 - 1;
-
-    NumericVector scores(2*n);
-
-    score_neighbours score_neighbours(E, P, scores);
-
-    parallelFor(0, n, score_neighbours);
-
-    return scores;
-
-}
-
-
 /////////////////////////////////////// NNI ////////////////////////////////////////
 
 // Below functions are modified from R-package `ape' by Emmanuel Paradis and Klaus Schliep
@@ -216,4 +128,95 @@ std::vector<arma::Mat<int>> nnin_cpp(const arma::Mat<int> E, const int n) {
     res[1] = reorderRcpp(E2);
 
     return res;
+}
+
+
+/////////////////////////////////////// Scistree ////////////////////////////////////////
+
+
+// [[Rcpp::export]]
+arma::mat CgetQ(arma::mat logQ, std::vector<std::vector<int>> children_dict, arma::Col<int> node_order){
+
+    int n = node_order.n_rows;
+    std::vector<int> children;
+
+    for (int i = 0; i < n; ++i) {
+        int node = node_order(i);
+        children = children_dict[node-1];
+        logQ.row(node-1) = logQ.row(children[0]-1) + logQ.row(children[1]-1);
+    }
+
+    return logQ;
+}
+
+// [[Rcpp::export]]
+double score_tree_cpp(const arma::Mat<int> E, const arma::mat P) {
+
+    int n = P.n_rows;
+    int m = P.n_cols;
+
+    arma::mat logQ(n * 2 - 1, m);
+
+    arma::mat logP_0 = log(P);
+    arma::mat logP_1 = log(1-P);
+
+    logQ.rows(0, n-1) = logP_1 - logP_0;
+
+    arma::Col<int> node_order(E.n_rows + 1);
+    node_order.rows(0,E.n_rows-1) = E.col(1);
+    node_order(E.n_rows) = n+1;
+    arma::uvec ids = find(node_order > n);
+    node_order = node_order.elem(ids);
+
+    std::vector<std::vector<int>> children_dict = allChildrenCPP(E);
+
+    logQ = CgetQ(logQ, children_dict, node_order);
+
+    double l = 0;
+
+    for (int i = 0; i < m; ++i) {
+        l += max(logQ.col(i)) + sum(logP_0.col(i));
+    }
+
+    return l;
+}
+
+
+struct score_neighbours : public Worker {
+
+    // original tree
+    const arma::Mat<int> E;
+    
+    const arma::mat P;
+
+    RVector<double> scores;
+
+    // initialize with source and destination
+    score_neighbours(const arma::Mat<int> E, const arma::mat P, NumericVector scores): 
+        E(E), P(P), scores(scores) {}
+
+    void operator()(std::size_t begin, std::size_t end) {
+        for (std::size_t i = begin; i < end; i++) {
+            std::vector<arma::Mat<int>> trees = nnin_cpp(E, i+1);
+            scores[2*i] = score_tree_cpp(trees[0], P);
+            scores[2*i+1] = score_tree_cpp(trees[1], P);
+        }
+    }
+};
+
+// [[Rcpp::export]]
+NumericVector nni_cpp_parallel(const List tree, arma::mat P) {
+    
+    arma::Mat<int> E = tree["edge"];
+
+    int n = E.n_rows/2 - 1;
+
+    NumericVector scores(2*n);
+
+    score_neighbours score_neighbours(E, P, scores);
+
+    parallelFor(0, n, score_neighbours);
+
+    return scores;
+
 }
