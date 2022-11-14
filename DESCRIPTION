@@ -20,6 +20,9 @@ Imports:
     tidygraph
 Suggests: 
     testthat (>= 3.0.0),
+    ggplot2,
+    ggtree,
+    patchwork
 Config/testthat/edition: 3
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
 NeedsCompilation: yes
