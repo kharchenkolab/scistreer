@@ -1,0 +1,27 @@
+Package: rscistree
+Title: Maximum-Likelilihood Phylogeny using Noisy Genotypes
+URL: https://github.com/kharchenkolab/rscistree
+Version: 1.0.0
+Authors@R: c(person("Teng","Gao", email="tgao@g.harvard.edu", role=c("cre", "aut")), person("Evan", "Biederstedt", email="evan.biederstedt@gmail.com", role="aut"), person("Peter", "Kharchenko", email = "peter_kharchenko@hms.harvard.edu", role = "aut"))
+Description: A R/Rcpp implementation of the ScisTree algorithm
+License: GPL-2.0 license
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    R (>= 4.0.0)
+Imports:
+    ape,
+    dplyr,
+    parallelDist,
+    phangorn,
+    Rcpp, 
+    RcppParallel
+Suggests: 
+    testthat (>= 3.0.0),
+Config/testthat/edition: 3
+LinkingTo: Rcpp, RcppArmadillo, RcppParallel
+NeedsCompilation: yes
+SystemRequirements: C++11, GNU make
+Author: Teng Gao [cre, aut], Evan Biederstedt [aut], Peter Kharchenko [aut]
+Maintainer: Teng Gao <tgaoteng@gmail.com>
+RoxygenNote: 7.2.1
