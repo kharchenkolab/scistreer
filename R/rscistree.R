@@ -152,7 +152,7 @@ score_tree = function(tree, P, get_l_matrix = FALSE) {
 #' @param tree phylo Single-cell phylogenetic tree
 #' @param P matrix Genotype probability matrix
 #' @return list Mutation placements
-#' @keywords internal
+#' @export
 annotate_tree = function(tree, P) {
    
     sites = colnames(P)
@@ -282,8 +282,8 @@ mut_to_tree = function(gtree, mut_nodes) {
 #' @param gtree tbl_graph The single-cell phylogeny
 #' @param mut_nodes dataframe Mutation placements
 #' @return igraph Mutation graph
-#' @keywords internal
-get_mut_tree = function(gtree) {
+#' @export
+get_mut_graph = function(gtree) {
 
     mut_nodes = as.data.frame(gtree) %>%
         filter(!is.na(site)) %>%
@@ -366,7 +366,7 @@ transfer_links = function(G) {
 #'
 #' @param gtree tbl_graph The single-cell phylogeny
 #' @return phylo The single-cell phylogeny
-#' @keywords internal
+#' @export
 to_phylo = function(gtree) {
     
     phytree = gtree %>% ape::as.phylo()
