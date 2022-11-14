@@ -4,25 +4,18 @@
 \alias{run_scistree}
 \title{Run the scistree workflow}
 \usage{
-run_scistree(
-  P,
-  init = c("UPGMA", "NJ"),
-  max_iter = 100,
-  eps = 0.01,
-  ncores = 1,
-  verbose = TRUE
-)
+run_scistree(P, init = "UPGMA", ncores = 1, ...)
 }
 \arguments{
 \item{P}{matrix Genotype probability matrix (cell x mutation). Each entry is a probability (0-1) that the locus is wildtype}
 
 \item{init}{character Initialization strategy; UPGMA or NJ}
 
+\item{ncores}{integer Number of cores to use}
+
 \item{max_iter}{integer Maximum number of iterations}
 
 \item{eps}{numeric Tolerance threshold in likelihood difference for stopping}
-
-\item{ncores}{integer Number of cores to use}
 
 \item{verbose}{logical Verbosity}
 }
