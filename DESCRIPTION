@@ -1,9 +1,9 @@
-Package: rscistree
-Title: Maximum-Likelilihood Phylogeny Using Noisy Genotypes
+Package: scistreer
+Title: Maximum-Likelilihood Single-Cell Phylogeny At Scale
 URL: https://github.com/kharchenkolab/rscistree
 Version: 1.0.0
 Authors@R: c(person("Teng","Gao", email="tgao@g.harvard.edu", role=c("cre", "aut")), person("Evan", "Biederstedt", email="evan.biederstedt@gmail.com", role="aut"), person("Peter", "Kharchenko", email = "peter_kharchenko@hms.harvard.edu", role = "aut"))
-Description: A R/Rcpp implementation of the ScisTree algorithm
+Description: 'scistreer' is an R implementation of the Single Cell Infinite Sites Tree (ScisTree) algorithm <doi.org/10.1093/bioinformatics/btz676>. It improves scalability of the algorithm via RcppParallel and is applicable to very large single-cell datasets (>10,000 cells).
 License: GPL-2.0 license
 Encoding: UTF-8
 LazyData: true
@@ -27,6 +27,6 @@ Config/testthat/edition: 3
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
 NeedsCompilation: yes
 SystemRequirements: C++11, GNU make
-Author: Teng Gao [cre, aut], Evan Biederstedt [aut], Peter Kharchenko [aut]
+Author: Teng Gao [cre, aut], Evan Biederstedt [aut], Yufeng Wu [aut], Peter Kharchenko [aut]
 Maintainer: Teng Gao <tgaoteng@gmail.com>
 RoxygenNote: 7.2.1
