@@ -13,17 +13,18 @@ biocViews:
 Imports:
     ape,
     dplyr,
+    ggplot2,
+    ggtree,
     igraph,
     parallelDist,
+    patchwork,
     phangorn,
     Rcpp, 
     RcppParallel,
+    stringr,
     tidygraph
 Suggests: 
-    testthat (>= 3.0.0),
-    ggplot2,
-    ggtree,
-    patchwork
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel
 NeedsCompilation: yes
