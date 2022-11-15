@@ -12,7 +12,7 @@ Within R, you only need to supply a genotype probability matrix (cell x mutation
 treeML = run_scistree(P_example, ncores = 8, init = 'UPGMA', verbose = F)
 ```
 The output maximum likelihood tree is a `ape::phylo` object. You can visualize the output and the probablity matrix as follows:
-```
+```R
 plot_phylo_heatmap(treeML, P_example)
 ``` 
 
