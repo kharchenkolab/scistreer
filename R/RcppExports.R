@@ -2,30 +2,30 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 allChildrenCPP <- function(E) {
-    .Call('_rscistree_allChildrenCPP', PACKAGE = 'rscistree', E)
+    .Call('_scistreer_allChildrenCPP', PACKAGE = 'scistreer', E)
 }
 
 reorder_rows <- function(x, y) {
-    .Call('_rscistree_reorder_rows', PACKAGE = 'rscistree', x, y)
+    .Call('_scistreer_reorder_rows', PACKAGE = 'scistreer', x, y)
 }
 
 reorderRcpp <- function(E) {
-    .Call('_rscistree_reorderRcpp', PACKAGE = 'rscistree', E)
+    .Call('_scistreer_reorderRcpp', PACKAGE = 'scistreer', E)
 }
 
 nnin_cpp <- function(E, n) {
-    .Call('_rscistree_nnin_cpp', PACKAGE = 'rscistree', E, n)
+    .Call('_scistreer_nnin_cpp', PACKAGE = 'scistreer', E, n)
 }
 
 CgetQ <- function(logQ, children_dict, node_order) {
-    .Call('_rscistree_CgetQ', PACKAGE = 'rscistree', logQ, children_dict, node_order)
+    .Call('_scistreer_CgetQ', PACKAGE = 'scistreer', logQ, children_dict, node_order)
 }
 
 score_tree_cpp <- function(E, P) {
-    .Call('_rscistree_score_tree_cpp', PACKAGE = 'rscistree', E, P)
+    .Call('_scistreer_score_tree_cpp', PACKAGE = 'scistreer', E, P)
 }
 
 nni_cpp_parallel <- function(tree, P) {
-    .Call('_rscistree_nni_cpp_parallel', PACKAGE = 'rscistree', tree, P)
+    .Call('_scistreer_nni_cpp_parallel', PACKAGE = 'scistreer', tree, P)
 }
 

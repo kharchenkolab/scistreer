@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // allChildrenCPP
 std::vector<std::vector<int>> allChildrenCPP(const arma::Mat<int> E);
-RcppExport SEXP _rscistree_allChildrenCPP(SEXP ESEXP) {
+RcppExport SEXP _scistreer_allChildrenCPP(SEXP ESEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -24,7 +24,7 @@ END_RCPP
 }
 // reorder_rows
 arma::Mat<int> reorder_rows(arma::Mat<int> x, arma::Col<int> y);
-RcppExport SEXP _rscistree_reorder_rows(SEXP xSEXP, SEXP ySEXP) {
+RcppExport SEXP _scistreer_reorder_rows(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -36,7 +36,7 @@ END_RCPP
 }
 // reorderRcpp
 arma::Mat<int> reorderRcpp(arma::Mat<int> E);
-RcppExport SEXP _rscistree_reorderRcpp(SEXP ESEXP) {
+RcppExport SEXP _scistreer_reorderRcpp(SEXP ESEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -47,7 +47,7 @@ END_RCPP
 }
 // nnin_cpp
 std::vector<arma::Mat<int>> nnin_cpp(const arma::Mat<int> E, const int n);
-RcppExport SEXP _rscistree_nnin_cpp(SEXP ESEXP, SEXP nSEXP) {
+RcppExport SEXP _scistreer_nnin_cpp(SEXP ESEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -59,7 +59,7 @@ END_RCPP
 }
 // CgetQ
 arma::mat CgetQ(arma::mat logQ, std::vector<std::vector<int>> children_dict, arma::Col<int> node_order);
-RcppExport SEXP _rscistree_CgetQ(SEXP logQSEXP, SEXP children_dictSEXP, SEXP node_orderSEXP) {
+RcppExport SEXP _scistreer_CgetQ(SEXP logQSEXP, SEXP children_dictSEXP, SEXP node_orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -72,7 +72,7 @@ END_RCPP
 }
 // score_tree_cpp
 double score_tree_cpp(const arma::Mat<int> E, const arma::mat P);
-RcppExport SEXP _rscistree_score_tree_cpp(SEXP ESEXP, SEXP PSEXP) {
+RcppExport SEXP _scistreer_score_tree_cpp(SEXP ESEXP, SEXP PSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -84,7 +84,7 @@ END_RCPP
 }
 // nni_cpp_parallel
 NumericVector nni_cpp_parallel(const List tree, arma::mat P);
-RcppExport SEXP _rscistree_nni_cpp_parallel(SEXP treeSEXP, SEXP PSEXP) {
+RcppExport SEXP _scistreer_nni_cpp_parallel(SEXP treeSEXP, SEXP PSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -96,17 +96,17 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rscistree_allChildrenCPP", (DL_FUNC) &_rscistree_allChildrenCPP, 1},
-    {"_rscistree_reorder_rows", (DL_FUNC) &_rscistree_reorder_rows, 2},
-    {"_rscistree_reorderRcpp", (DL_FUNC) &_rscistree_reorderRcpp, 1},
-    {"_rscistree_nnin_cpp", (DL_FUNC) &_rscistree_nnin_cpp, 2},
-    {"_rscistree_CgetQ", (DL_FUNC) &_rscistree_CgetQ, 3},
-    {"_rscistree_score_tree_cpp", (DL_FUNC) &_rscistree_score_tree_cpp, 2},
-    {"_rscistree_nni_cpp_parallel", (DL_FUNC) &_rscistree_nni_cpp_parallel, 2},
+    {"_scistreer_allChildrenCPP", (DL_FUNC) &_scistreer_allChildrenCPP, 1},
+    {"_scistreer_reorder_rows", (DL_FUNC) &_scistreer_reorder_rows, 2},
+    {"_scistreer_reorderRcpp", (DL_FUNC) &_scistreer_reorderRcpp, 1},
+    {"_scistreer_nnin_cpp", (DL_FUNC) &_scistreer_nnin_cpp, 2},
+    {"_scistreer_CgetQ", (DL_FUNC) &_scistreer_CgetQ, 3},
+    {"_scistreer_score_tree_cpp", (DL_FUNC) &_scistreer_score_tree_cpp, 2},
+    {"_scistreer_nni_cpp_parallel", (DL_FUNC) &_scistreer_nni_cpp_parallel, 2},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_rscistree(DllInfo *dll) {
+RcppExport void R_init_scistreer(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

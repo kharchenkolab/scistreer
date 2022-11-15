@@ -5,7 +5,7 @@
 #' @importFrom phangorn upgma 
 #' @importFrom ape root drop.tip nj ladderize
 #' @importFrom parallelDist parDist
-#' @useDynLib rscistree
+#' @useDynLib scistreer
 NULL
 
 #' Run the scistree workflow
