@@ -1,6 +1,6 @@
 library(scistreer)
 
 test_that("Small input works", {
-    tree = run_scistree(P_small, verbose = T)
-    expect_equal(tree$likelihood, -1606.5)
+    tree = run_scistree(P_small, verbose = F)
+    expect_equal(round(tree$likelihood, 3), -1606.497)
 })
