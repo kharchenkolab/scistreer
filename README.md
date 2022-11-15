@@ -6,14 +6,14 @@
 devtools::install_github('https://github.com/kharchenkolab/scistreer')
 ```
 # Usage
-Within R, you only need to supply a genotype probability matrix (cell x mutation), where each entry is the probability that the cell does *not* harbor the mutation.
+Within R, you only need to supply a genotype probability matrix (cell x mutation), where each entry is the probability that the cell does *not* harbor the mutation. For example,
 
 ```
-treeML = run_scistree(P, ncores = 8, init = 'UPGMA', verbose = F)
+treeML = run_scistree(P_example, ncores = 8, init = 'UPGMA', verbose = F)
 ```
 The output maximum likelihood tree is a `ape::phylo` object. You can visualize the output and the probablity matrix as follows:
 ```
-plot_phylo_heatmap(treeML, P)
+plot_phylo_heatmap(treeML, P_example)
 ``` 
 
 <p align="center">
