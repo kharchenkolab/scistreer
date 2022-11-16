@@ -25,7 +25,7 @@ plot_phylo_heatmap(treeML, P_example)
 </p>
 
 # Benchmark
-`scistreer` is about 10x faster than the original implementation on a single-thread. The runtime can be further reduced by shared-memory multi-threading via `RcppParallel`.
+`scistreer` is about 10x faster than the [original implementation](https://github.com/yufengwudcs/ScisTree) on a single-thread. The runtime can be further reduced by shared-memory multi-threading via `RcppParallel`.
 ![image](https://user-images.githubusercontent.com/13375875/201978296-e6cbabf2-1cd9-4c92-9e70-0ca2082b53e0.png)
 
 # Citations
