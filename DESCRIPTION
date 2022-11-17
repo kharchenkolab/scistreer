@@ -9,12 +9,12 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    R (>= 4.0.0)
+    R (>= 4.1.0)
 biocViews:
 Imports:
     ape,
     dplyr,
-    ggplot2 (== 3.3.6),
+    ggplot2,
     ggtree,
     igraph,
     parallelDist,
