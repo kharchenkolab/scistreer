@@ -21,7 +21,7 @@ plot_phylo_heatmap(treeML, P_example)
 ``` 
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/13375875/201975144-1f45ea93-c0e3-4148-893b-438ad7102dcb.png" width="600">
+<img src="https://user-images.githubusercontent.com/13375875/202533038-3513f6ba-454f-4bd2-9808-70e3442808cd.png" width="600">
 </p>
 
 # Benchmark
