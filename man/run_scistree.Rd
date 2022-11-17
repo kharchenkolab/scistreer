@@ -14,7 +14,7 @@ run_scistree(
 )
 }
 \arguments{
-\item{P}{matrix Genotype probability matrix (cell x mutation). Each entry is a probability (0-1) that the locus is mutant}
+\item{P}{matrix Genotype probability matrix (cell x mutation). Each entry is a probability (0-1) that the cell harbors the mutation}
 
 \item{init}{character Initialization strategy; UPGMA or NJ}
 

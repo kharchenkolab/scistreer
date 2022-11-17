@@ -10,7 +10,7 @@
 NULL
 
 #' Run the scistree workflow
-#' @param P matrix Genotype probability matrix (cell x mutation). Each entry is a probability (0-1) that the locus is mutant
+#' @param P matrix Genotype probability matrix (cell x mutation). Each entry is a probability (0-1) that the cell harbors the mutation
 #' @param init character Initialization strategy; UPGMA or NJ
 #' @param max_iter integer Maximum number of iterations
 #' @param eps numeric Tolerance threshold in likelihood difference for stopping
