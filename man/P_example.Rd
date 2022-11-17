@@ -3,7 +3,7 @@
 \docType{data}
 \name{P_example}
 \alias{P_example}
-\title{example genotype probability matrix}
+\title{Example genotype probability matrix}
 \format{
 An object of class \code{matrix} (inherits from \code{array}) with 1000 rows and 25 columns.
 }
@@ -11,6 +11,6 @@ An object of class \code{matrix} (inherits from \code{array}) with 1000 rows and
 P_example
 }
 \description{
-example genotype probability matrix
+Example genotype probability matrix
 }
 \keyword{datasets}

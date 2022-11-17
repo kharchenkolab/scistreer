@@ -374,7 +374,7 @@ transfer_links = function(G) {
 #' @param gtree tbl_graph The single-cell phylogeny
 #' @return phylo The single-cell phylogeny
 #' @examples
-#' tree_small = to_phylo(annotate_tree(tree_small))
+#' tree_small = to_phylo(annotate_tree(tree_small, P_small))
 #' @export
 to_phylo = function(gtree) {
     

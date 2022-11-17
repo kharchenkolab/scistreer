@@ -3,7 +3,7 @@
 \docType{data}
 \name{tree_small}
 \alias{tree_small}
-\title{smaller example tree built from P_small}
+\title{Smaller example tree built from P_small}
 \format{
 An object of class \code{phylo} of length 5.
 }
@@ -11,6 +11,6 @@ An object of class \code{phylo} of length 5.
 tree_small
 }
 \description{
-smaller example tree built from P_small
+Smaller example tree built from P_small
 }
 \keyword{datasets}

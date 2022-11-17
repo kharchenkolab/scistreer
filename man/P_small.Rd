@@ -3,7 +3,7 @@
 \docType{data}
 \name{P_small}
 \alias{P_small}
-\title{smaller example genotype probability matrix}
+\title{Smaller example genotype probability matrix}
 \format{
 An object of class \code{matrix} (inherits from \code{array}) with 100 rows and 25 columns.
 }
@@ -11,6 +11,6 @@ An object of class \code{matrix} (inherits from \code{array}) with 100 rows and 
 P_small
 }
 \description{
-smaller example genotype probability matrix
+Smaller example genotype probability matrix
 }
 \keyword{datasets}
