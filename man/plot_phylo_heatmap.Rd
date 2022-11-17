@@ -19,5 +19,5 @@ plot_phylo_heatmap(tree, P, branch_width = 0.5, root_edge = TRUE)
 Plot phylogeny and mutation heatmap
 }
 \examples{
-plot_phylo_heatmap(tree_small, P_small)
+p = plot_phylo_heatmap(tree_small, P_small)
 }

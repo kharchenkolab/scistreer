@@ -157,7 +157,7 @@ score_tree = function(tree, P, get_l_matrix = FALSE) {
 #' @param P matrix Genotype probability matrix
 #' @return list Mutation placements
 #' @examples
-#' gtree_small = annotate_tree(tree_small)
+#' gtree_small = annotate_tree(tree_small, P_small)
 #' @export
 annotate_tree = function(tree, P) {
    

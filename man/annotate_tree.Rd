@@ -18,5 +18,5 @@ list Mutation placements
 Find maximum lilkelihood assignment of mutations on a tree
 }
 \examples{
-gtree_small = annotate_tree(tree_small)
+gtree_small = annotate_tree(tree_small, P_small)
 }
