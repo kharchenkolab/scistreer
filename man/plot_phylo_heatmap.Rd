@@ -9,12 +9,15 @@ plot_phylo_heatmap(tree, P, branch_width = 0.5, root_edge = TRUE)
 \arguments{
 \item{tree}{phylo or tbl_graph Phylogeny}
 
+\item{P}{matrix Genotype probability matrix}
+
 \item{branch_width}{numeric Branch width}
 
 \item{root_edge}{logical Whether to plot root edge}
-
-\item{init}{P matrix Genotype probability matrix}
 }
 \description{
 Plot phylogeny and mutation heatmap
+}
+\examples{
+plot_phylo_heatmap(tree_small, P_small)
 }

@@ -8,12 +8,13 @@ get_mut_graph(gtree)
 }
 \arguments{
 \item{gtree}{tbl_graph The single-cell phylogeny}
-
-\item{mut_nodes}{dataframe Mutation placements}
 }
 \value{
 igraph Mutation graph
 }
 \description{
 Convert a single-cell phylogeny with mutation placements into a mutation graph
+}
+\examples{
+mut_graph = get_mut_graph(annotate_tree(tree_small))
 }

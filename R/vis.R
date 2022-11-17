@@ -5,9 +5,11 @@ NULL
 
 #' Plot phylogeny and mutation heatmap
 #' @param tree phylo or tbl_graph Phylogeny
-#' @param init P matrix Genotype probability matrix
+#' @param P matrix Genotype probability matrix
 #' @param branch_width numeric Branch width
 #' @param root_edge logical Whether to plot root edge
+#' @examples
+#' p = plot_phylo_heatmap(tree_small, P_small)
 #' @export
 plot_phylo_heatmap = function(tree, P, branch_width = 0.5, root_edge = TRUE) {
 
@@ -40,7 +42,7 @@ plot_phylo_heatmap = function(tree, P, branch_width = 0.5, root_edge = TRUE) {
     cell_order = p_tree$data %>% filter(isTip) %>% arrange(y) %>% pull(label)
 
     p_heatmap = as.data.frame(P) %>%
-        tibble::rownames_to_column('cell') %>%
+        mutate(cell = rownames(P)) %>%
         mutate(cell = factor(cell, cell_order)) %>%
         reshape2::melt(id.var = 'cell', variable.name = 'mut', value.name = 'p') %>%
         ggplot(

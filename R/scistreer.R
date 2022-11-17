@@ -5,6 +5,7 @@
 #' @importFrom phangorn upgma 
 #' @importFrom ape root drop.tip nj ladderize
 #' @importFrom parallelDist parDist
+#' @importFrom stats na.omit reorder setNames
 #' @useDynLib scistreer
 NULL
 
@@ -15,8 +16,11 @@ NULL
 #' @param eps numeric Tolerance threshold in likelihood difference for stopping
 #' @param verbose logical Verbosity
 #' @param ncores integer Number of cores to use
+#' @return phylo A maximum-likelihood phylogeny
+#' @examples
+#' tree_small = run_scistree(P_small)
 #' @export
-run_scistree = function(P, init = 'UPGMA', ncores = 1, ...) {
+run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.01, verbose = TRUE) {
 
     # contruct initial tree
     dist_mat = parDist(rbind(P, 'outgroup' = 1), threads = ncores)
@@ -39,7 +43,7 @@ run_scistree = function(P, init = 'UPGMA', ncores = 1, ...) {
         stop("init has be one of 'UPGMA', 'NJ'")
     }
 
-    tree_list = perform_nni(tree_init, P, ncores = ncores, ...)
+    tree_list = perform_nni(tree_init, P, ncores = ncores, max_iter = max_iter, eps = eps, verbose = verbose)
 
     tree_final = tree_list[[length(tree_list)]]
 
@@ -61,7 +65,7 @@ run_scistree = function(P, init = 'UPGMA', ncores = 1, ...) {
 #' @param verbose logical Verbosity
 #' @param ncores integer Number of cores to use
 #' @return multiPhylo List of trees corresponding to the rearrangement steps
-#' @export
+#' @keywords internal
 perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, verbose = TRUE) {
     
     P = as.matrix(P)
@@ -152,6 +156,8 @@ score_tree = function(tree, P, get_l_matrix = FALSE) {
 #' @param tree phylo Single-cell phylogenetic tree
 #' @param P matrix Genotype probability matrix
 #' @return list Mutation placements
+#' @examples
+#' gtree_small = annotate_tree(tree_small)
 #' @export
 annotate_tree = function(tree, P) {
    
@@ -223,7 +229,7 @@ mut_to_tree = function(gtree, mut_nodes) {
         select(-any_of(c('n_mut', 'l', 'site', 'clone'))) %>%
         left_join(
             mut_nodes %>%
-                mutate(n_mut = unlist(purrr::map(str_split(site, ','), length))) %>%
+                mutate(n_mut = unlist(lapply(str_split(site, ','), length))) %>%
                 select(name, n_mut, site),
             by = 'name'
         ) %>%
@@ -280,8 +286,9 @@ mut_to_tree = function(gtree, mut_nodes) {
 #' Convert a single-cell phylogeny with mutation placements into a mutation graph
 #'
 #' @param gtree tbl_graph The single-cell phylogeny
-#' @param mut_nodes dataframe Mutation placements
 #' @return igraph Mutation graph
+#' @examples
+#' mut_graph = get_mut_graph(annotate_tree(tree_small))
 #' @export
 get_mut_graph = function(gtree) {
 
@@ -366,6 +373,8 @@ transfer_links = function(G) {
 #'
 #' @param gtree tbl_graph The single-cell phylogeny
 #' @return phylo The single-cell phylogeny
+#' @examples
+#' tree_small = to_phylo(annotate_tree(tree_small))
 #' @export
 to_phylo = function(gtree) {
     

@@ -15,3 +15,6 @@ phylo The single-cell phylogeny
 \description{
 Convert the phylogeny from tidygraph to phylo object
 }
+\examples{
+tree_small = to_phylo(annotate_tree(tree_small))
+}
