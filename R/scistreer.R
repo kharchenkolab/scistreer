@@ -288,7 +288,7 @@ mut_to_tree = function(gtree, mut_nodes) {
 #' @param gtree tbl_graph The single-cell phylogeny
 #' @return igraph Mutation graph
 #' @examples
-#' mut_graph = get_mut_graph(annotate_tree(tree_small))
+#' mut_graph = get_mut_graph(annotate_tree(tree_small, P_small))
 #' @export
 get_mut_graph = function(gtree) {
 
