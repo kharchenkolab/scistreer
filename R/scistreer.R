@@ -10,7 +10,7 @@
 NULL
 
 #' Run the scistree workflow
-#' @param P matrix Genotype probability matrix (cell x mutation). Each entry is a probability (0-1) that the locus is wildtype
+#' @param P matrix Genotype probability matrix (cell x mutation). Each entry is a probability (0-1) that the locus is mutant
 #' @param init character Initialization strategy; UPGMA or NJ
 #' @param max_iter integer Maximum number of iterations
 #' @param eps numeric Tolerance threshold in likelihood difference for stopping
@@ -21,6 +21,9 @@ NULL
 #' tree_small = run_scistree(P_small)
 #' @export
 run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.01, verbose = TRUE) {
+
+    # do this flip since scistree assumes normal genotype probabilities
+    P = 1 - P
 
     # contruct initial tree
     dist_mat = parDist(rbind(P, 'outgroup' = 1), threads = ncores)
@@ -163,7 +166,7 @@ annotate_tree = function(tree, P) {
    
     sites = colnames(P)
     n = nrow(P)
-    tree_stats = score_tree(tree, P, get_l_matrix = TRUE)
+    tree_stats = score_tree(tree, 1-P, get_l_matrix = TRUE)
 
     l_matrix = as.data.frame(tree_stats$l_matrix)
 
