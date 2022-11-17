@@ -14,7 +14,7 @@ biocViews:
 Imports:
     ape,
     dplyr,
-    ggplot2,
+    ggplot2 (== 3.3.6),
     ggtree,
     igraph,
     parallelDist,
