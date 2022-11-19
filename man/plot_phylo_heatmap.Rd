@@ -16,7 +16,7 @@ plot_phylo_heatmap(tree, P, branch_width = 0.5, root_edge = TRUE)
 \item{root_edge}{logical Whether to plot root edge}
 }
 \value{
-A ggplot of the single-cell phylogeny and mutation probability heatmap
+ggplot Plot visualizing the single-cell phylogeny and mutation probability heatmap
 }
 \description{
 Plot phylogeny and mutation heatmap

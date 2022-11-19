@@ -8,7 +8,7 @@ NULL
 #' @param P matrix Genotype probability matrix
 #' @param branch_width numeric Branch width
 #' @param root_edge logical Whether to plot root edge
-#' @return A ggplot of the single-cell phylogeny and mutation probability heatmap
+#' @return ggplot Plot visualizing the single-cell phylogeny and mutation probability heatmap
 #' @examples
 #' p = plot_phylo_heatmap(tree_small, P_small)
 #' @export
