@@ -12,7 +12,7 @@ annotate_tree(tree, P)
 \item{P}{matrix Genotype probability matrix}
 }
 \value{
-list Mutation placements
+tbl_graph A single-cell phylogeny with mutation placements
 }
 \description{
 Find maximum lilkelihood assignment of mutations on a tree

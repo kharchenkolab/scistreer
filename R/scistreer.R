@@ -22,11 +22,12 @@ NULL
 #' @export
 run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.01, verbose = TRUE) {
 
-    # do this flip since scistree assumes normal genotype probabilities
-    P = 1 - P
+    if (!is.matrix(P)) {
+        stop('P needs to be a matrix')
+    }
 
     # contruct initial tree
-    dist_mat = parDist(rbind(P, 'outgroup' = 1), threads = ncores)
+    dist_mat = parDist(rbind(P, 'outgroup' = 0), threads = ncores)
 
     if (init == 'UPGMA') {
 
@@ -70,9 +71,7 @@ run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.0
 #' @return multiPhylo List of trees corresponding to the rearrangement steps
 #' @keywords internal
 perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, verbose = TRUE) {
-    
-    P = as.matrix(P)
-    
+        
     converge = FALSE
     
     i = 1
@@ -130,8 +129,8 @@ score_tree = function(tree, P, get_l_matrix = FALSE) {
 
     logQ = matrix(nrow = tree$Nnode * 2 + 1, ncol = m)
 
-    logP_0 = log(P)
-    logP_1 = log(1-P)
+    logP_0 = log(1-P)
+    logP_1 = log(P)
     
     node_order = c(tree$edge[,2], n+1)
     node_order = node_order[node_order > n]
@@ -158,7 +157,7 @@ score_tree = function(tree, P, get_l_matrix = FALSE) {
 #' Find maximum lilkelihood assignment of mutations on a tree
 #' @param tree phylo Single-cell phylogenetic tree
 #' @param P matrix Genotype probability matrix
-#' @return list Mutation placements
+#' @return tbl_graph A single-cell phylogeny with mutation placements
 #' @examples
 #' gtree_small = annotate_tree(tree_small, P_small)
 #' @export
@@ -166,7 +165,7 @@ annotate_tree = function(tree, P) {
    
     sites = colnames(P)
     n = nrow(P)
-    tree_stats = score_tree(tree, 1-P, get_l_matrix = TRUE)
+    tree_stats = score_tree(tree, P, get_l_matrix = TRUE)
 
     l_matrix = as.data.frame(tree_stats$l_matrix)
 

@@ -157,8 +157,8 @@ double score_tree_cpp(const arma::Mat<int> E, const arma::mat P) {
 
     arma::mat logQ(n * 2 - 1, m);
 
-    arma::mat logP_0 = log(P);
-    arma::mat logP_1 = log(1-P);
+    arma::mat logP_0 = log(1-P);
+    arma::mat logP_1 = log(P);
 
     logQ.rows(0, n-1) = logP_1 - logP_0;
 
