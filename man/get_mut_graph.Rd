@@ -16,5 +16,5 @@ igraph Mutation graph
 Convert a single-cell phylogeny with mutation placements into a mutation graph
 }
 \examples{
-mut_graph = get_mut_graph(annotate_tree(tree_small, P_small))
+mut_graph = get_mut_graph(gtree_small)
 }

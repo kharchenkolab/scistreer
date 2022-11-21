@@ -17,4 +17,6 @@ tbl_graph A single-cell phylogeny with mutation placements
 \description{
 Transfer mutation assignment onto a single-cell phylogeny
 }
-\keyword{internal}
+\examples{
+gtree_small = mut_to_tree(gtree_small, mut_nodes_small)
+}
