@@ -2,7 +2,7 @@
 % Please edit documentation in R/scistreer.R
 \name{score_tree}
 \alias{score_tree}
-\title{score a tree based on maximum likelihood}
+\title{Score a tree based on maximum likelihood}
 \usage{
 score_tree(tree, P, get_l_matrix = FALSE)
 }
@@ -17,7 +17,7 @@ score_tree(tree, P, get_l_matrix = FALSE)
 list Likelihood scores of a tree
 }
 \description{
-score a tree based on maximum likelihood
+Score a tree based on maximum likelihood
 }
 \examples{
 tree_likelihood = score_tree(tree_upgma, P_small)$l_tree
