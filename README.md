@@ -1,7 +1,7 @@
 <!-- badges: start -->
 [![<kharchenkolab>](https://circleci.com/gh/kharchenkolab/scistreer.svg?style=svg)](https://app.circleci.com/pipelines/github/kharchenkolab/scistreer)
-[![CRAN status](https://www.r-pkg.org/badges/version/numbat)](https://cran.r-project.org/package=numbat)
-[![CRAN downloads](https://cranlogs.r-pkg.org/badges/numbat)](https://cran.r-project.org/package=numbat)
+[![CRAN status](https://www.r-pkg.org/badges/version/scistreer)](https://cran.r-project.org/package=scistreer)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/scistreer)](https://cran.r-project.org/package=scistreer)
 <!-- badges: end -->
 
 # ScisTreeR
