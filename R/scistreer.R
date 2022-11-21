@@ -306,7 +306,9 @@ mut_to_tree = function(gtree, mut_nodes) {
 #' @export
 get_mut_graph = function(gtree) {
 
-    mut_nodes = as.data.frame(gtree) %>%
+    mut_nodes = gtree %>% 
+        activate(nodes) %>%
+        as.data.frame() %>%
         filter(!is.na(site)) %>%
         distinct(name, site)
 
