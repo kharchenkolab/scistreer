@@ -116,7 +116,7 @@ perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, ver
     return(tree_list)
 }
 
-#' score a tree based on maximum likelihood
+#' Score a tree based on maximum likelihood
 #' @param tree phylo object
 #' @param P genotype probability matrix
 #' @param get_l_matrix whether to compute the whole likelihood matrix

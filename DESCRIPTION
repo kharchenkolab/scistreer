@@ -23,6 +23,7 @@ Imports:
     Rcpp,
     reshape2,
     RcppParallel,
+    RhpcBLASctl,
     stringr,
     tidygraph
 Suggests: 
