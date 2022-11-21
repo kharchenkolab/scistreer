@@ -32,4 +32,6 @@ multiPhylo List of trees corresponding to the rearrangement steps
 \description{
 Maximum likelihood tree search via NNI
 }
-\keyword{internal}
+\examples{
+tree_list = perform_nni(tree_upgma, P_small)
+}

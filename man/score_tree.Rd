@@ -19,4 +19,6 @@ list Likelihood scores of a tree
 \description{
 score a tree based on maximum likelihood
 }
-\keyword{internal}
+\examples{
+tree_likelihood = score_tree(tree_upgma, P_small)$l_tree
+}
