@@ -1,9 +1,11 @@
 <!-- badges: start -->
 [![<kharchenkolab>](https://circleci.com/gh/kharchenkolab/scistreer.svg?style=svg)](https://app.circleci.com/pipelines/github/kharchenkolab/scistreer)
+[![CRAN status](https://www.r-pkg.org/badges/version/numbat)](https://cran.r-project.org/package=numbat)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/numbat)](https://cran.r-project.org/package=numbat)
 <!-- badges: end -->
 
 # ScisTreeR
-`scistreer` is an R/Rcpp implementation of the [ScisTree](https://doi.org/10.1093/bioinformatics/btz676) algorithm (Yufeng Wu, Bioinformatics 2019). It improves scalability of the algorithm via RcppParallel and is applicable to very large single-cell datasets (>10,000 cells).
+Fast maximum-likelihood phylogeny inference from noisy single-cell data using the 'ScisTree' algorithm [(Wu, Bioinformatics 2019)](https://academic.oup.com/bioinformatics/article/36/3/742/5555811). 'scistreer' provides an 'R' interface and improves speed via 'Rcpp' and 'RcppParallel', making the method applicable to massive single-cell datasets (>10,000 cells).
 
 # Installation
 ```R
