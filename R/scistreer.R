@@ -22,6 +22,9 @@ NULL
 #' @export
 run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.01, verbose = TRUE) {
 
+    RhpcBLASctl::blas_set_num_threads(1)
+    RhpcBLASctl::omp_set_num_threads(1)
+
     if (!is.matrix(P)) {
         stop('P needs to be a matrix')
     }
@@ -73,6 +76,9 @@ run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.0
 #' tree_list = perform_nni(tree_upgma, P_small)
 #' @export 
 perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, verbose = TRUE) {
+
+    RhpcBLASctl::blas_set_num_threads(1)
+    RhpcBLASctl::omp_set_num_threads(1)
         
     converge = FALSE
     
