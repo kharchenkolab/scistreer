@@ -8,6 +8,11 @@
 Fast maximum-likelihood phylogeny inference from noisy single-cell data using the 'ScisTree' algorithm [(Wu, Bioinformatics 2019)](https://academic.oup.com/bioinformatics/article/36/3/742/5555811). 'scistreer' provides an 'R' interface and improves speed via 'Rcpp' and 'RcppParallel', making the method applicable to massive single-cell datasets (>10,000 cells).
 
 # Installation
+To install the stable CRAN version, 
+```R
+install.packages('scistreer')
+```
+To get the most recent updates, you can install the github version via `devtools`:
 ```R
 devtools::install_github('https://github.com/kharchenkolab/scistreer')
 ```
