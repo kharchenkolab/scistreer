@@ -10,7 +10,7 @@ Fast maximum-likelihood phylogeny inference from noisy single-cell data using th
 # Installation
 To install the stable CRAN version, 
 ```R
-install.packages('scistreer')
+install.packages('scistreer', dependencies = TRUE)
 ```
 To get the most recent updates, you can install the github version via `devtools`:
 ```R
