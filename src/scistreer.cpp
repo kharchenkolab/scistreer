@@ -132,7 +132,7 @@ std::vector<arma::Mat<int>> nnin_cpp(const arma::Mat<int> E, const int n) {
 
 // Computing the logQ matrix for the rearranged tree
 // [[Rcpp::export]]
-arma::vec nnin_score(const arma::Mat<int> E, const int n, arma::mat logQ, double L_0) {
+arma::vec nnin_score_max(const arma::Mat<int> E, const int n, arma::mat logQ, double L_0) {
 
     arma::Col<int> parent = E.col(0);
     arma::Col<int> child = E.col(1);
@@ -235,30 +235,7 @@ double score_tree_cpp(const arma::Mat<int> E, const arma::mat P) {
     return l;
 }
 
-
-struct score_neighbours : public Worker {
-
-    // original tree
-    const arma::Mat<int> E;
-    
-    const arma::mat P;
-
-    RVector<double> scores;
-
-    // initialize with source and destination
-    score_neighbours(const arma::Mat<int> E, const arma::mat P, NumericVector scores): 
-        E(E), P(P), scores(scores) {}
-
-    void operator()(std::size_t begin, std::size_t end) {
-        for (std::size_t i = begin; i < end; i++) {
-            std::vector<arma::Mat<int>> trees = nnin_cpp(E, i+1);
-            scores[2*i] = score_tree_cpp(trees[0], P);
-            scores[2*i+1] = score_tree_cpp(trees[1], P);
-        }
-    }
-};
-
-struct score_neighbours_new : public Worker {
+struct score_neighbours_max: public Worker {
 
     // original tree
     const arma::Mat<int> E;
@@ -270,39 +247,21 @@ struct score_neighbours_new : public Worker {
     RVector<double> scores;
 
     // initialize with source and destination
-    score_neighbours_new(const arma::Mat<int> E, const arma::mat logQ, const double L_0, NumericVector scores): 
+    score_neighbours_max(const arma::Mat<int> E, const arma::mat logQ, const double L_0, NumericVector scores): 
         E(E), logQ(logQ), L_0(L_0), scores(scores) {}
 
     void operator()(std::size_t begin, std::size_t end) {
         for (std::size_t i = begin; i < end; i++) {
-            arma::vec res = nnin_score(E, i+1, logQ, L_0);
+            arma::vec res = nnin_score_max(E, i+1, logQ, L_0);
             scores[2*i] = res[0];
             scores[2*i+1] = res[1];
         }
     }
 };
 
-// [[Rcpp::export]]
-double get_score(const arma::mat logQ, const arma::mat P) {
-
-    int m = logQ.n_cols;
-
-    double L_0 = accu(log(1-P));
-
-    double l = 0;
-
-    for (int i = 0; i < m; ++i) {
-        l += max(logQ.col(i));
-    }
-
-    l += L_0;
-
-    return(l);
-}
-
 // Note that the tree has to be already in post-order
 // [[Rcpp::export]]
-NumericVector nni_cpp_parallel_new(const List tree, arma::mat P) {
+NumericVector nni_cpp_parallel(const List tree, arma::mat P) {
     
     arma::Mat<int> E = tree["edge"];
 
@@ -316,26 +275,124 @@ NumericVector nni_cpp_parallel_new(const List tree, arma::mat P) {
 
     NumericVector scores(2*n);
 
-    score_neighbours_new score_neighbours_new(E, logQ, L_0, scores);
+    score_neighbours_max score_neighbours_max(E, logQ, L_0, scores);
 
-    parallelFor(0, n, score_neighbours_new);
+    parallelFor(0, n, score_neighbours_max);
 
     return scores;
 
 }
 
+////////////////////// sum instead of max ///////////////////////
+
+#ifdef HAVE_LONG_DOUBLE
+#  define LDOUBLE long double
+#  define EXPL expl
+#else
+#  define LDOUBLE double
+#  define EXPL exp
+#endif
+
 // [[Rcpp::export]]
-NumericVector nni_cpp_parallel(const List tree, arma::mat P) {
+double logSumExp(const arma::vec& x) {
+    // https://github.com/helske/seqHMM/blob/master/src/logSumExp.cpp
+    unsigned int maxi = x.index_max();
+    LDOUBLE maxv = x(maxi);
+    if (!(maxv > -arma::datum::inf)) {
+        return -arma::datum::inf;
+    }
+    LDOUBLE cumsum = 0.0;
+    for (unsigned int i = 0; i < x.n_elem; i++) {
+        if ((i != maxi) & (x(i) > -arma::datum::inf)) {
+            cumsum += EXPL(x(i) - maxv);
+        }
+    }
+  
+    return maxv + log1p(cumsum);
+}
+
+// Computing the logQ matrix for the rearranged tree
+// [[Rcpp::export]]
+arma::vec nnin_score_sum(const arma::Mat<int> E, const int n, arma::mat logQ, arma::rowvec l_0) {
+
+    arma::Col<int> parent = E.col(0);
+    arma::Col<int> child = E.col(1);
+    int k = min(parent) - 1;
+    arma::uvec indvec = find(child > k);
+    int ind = indvec[n-1];
+    int p1 = parent[ind];
+    int p2 = child[ind];
+    arma::uvec ind1_vec = find(parent == p1);
+    ind1_vec = ind1_vec.elem(find(ind1_vec != ind));
+    int ind1 = ind1_vec[0];
+    arma::uvec ind2 = find(parent == p2);
+    
+    int e1 = child[ind1];
+    int e2 = child[ind2[0]];
+    int e3 = child[ind2[1]];
+
+    arma::vec scores(2);
+
+    arma::mat logQ_1 = logQ;
+    arma::mat logQ_2 = logQ;
+    
+    logQ_1.row(p2-1) = logQ.row(e1-1) + logQ.row(e3-1);
+    logQ_2.row(p2-1) = logQ.row(e1-1) + logQ.row(e2-1);
+
+    int m = logQ.n_cols;
+
+    for (int i = 0; i < m; ++i) {
+        scores[0] += logSumExp(logQ_1.col(i) + l_0[i]);
+        scores[1] += logSumExp(logQ_2.col(i) + l_0[i]);
+    }
+
+    return scores;
+}
+
+struct score_neighbours_sum: public Worker {
+
+    // original tree
+    const arma::Mat<int> E;
+
+    const arma::mat logQ;
+
+    const arma::rowvec l_0;
+
+    RVector<double> scores;
+
+    // initialize with source and destination
+    score_neighbours_sum(const arma::Mat<int> E, const arma::mat logQ, const arma::rowvec l_0, NumericVector scores): 
+        E(E), logQ(logQ), l_0(l_0), scores(scores) {}
+
+    void operator()(std::size_t begin, std::size_t end) {
+        for (std::size_t i = begin; i < end; i++) {
+            arma::vec res = nnin_score_sum(E, i+1, logQ, l_0);
+            scores[2*i] = res[0];
+            scores[2*i+1] = res[1];
+        }
+    }
+};
+
+
+// Note that the tree has to be already in post-order
+// [[Rcpp::export]]
+NumericVector nni_cpp_parallel_sum(const List tree, arma::mat P) {
     
     arma::Mat<int> E = tree["edge"];
 
+    // E = reorderRcpp(E);
+
     int n = E.n_rows/2 - 1;
+
+    arma::mat logQ = get_logQ(E, P);
+
+    arma::rowvec l_0 = sum(log(1-P), 0);
 
     NumericVector scores(2*n);
 
-    score_neighbours score_neighbours(E, P, scores);
+    score_neighbours_sum score_neighbours_sum(E, logQ, l_0, scores);
 
-    parallelFor(0, n, score_neighbours);
+    parallelFor(0, n, score_neighbours_sum);
 
     return scores;
 

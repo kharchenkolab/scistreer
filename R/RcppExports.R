@@ -2,46 +2,50 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 allChildrenCPP <- function(E) {
-    .Call('_scistreer_allChildrenCPP', PACKAGE = 'scistreer', E)
+    .Call('_scistreer2_allChildrenCPP', PACKAGE = 'scistreer2', E)
 }
 
 reorder_rows <- function(x, y) {
-    .Call('_scistreer_reorder_rows', PACKAGE = 'scistreer', x, y)
+    .Call('_scistreer2_reorder_rows', PACKAGE = 'scistreer2', x, y)
 }
 
 reorderRcpp <- function(E) {
-    .Call('_scistreer_reorderRcpp', PACKAGE = 'scistreer', E)
+    .Call('_scistreer2_reorderRcpp', PACKAGE = 'scistreer2', E)
 }
 
 nnin_cpp <- function(E, n) {
-    .Call('_scistreer_nnin_cpp', PACKAGE = 'scistreer', E, n)
+    .Call('_scistreer2_nnin_cpp', PACKAGE = 'scistreer2', E, n)
 }
 
-nnin_score <- function(E, n, logQ, L_0) {
-    .Call('_scistreer_nnin_score', PACKAGE = 'scistreer', E, n, logQ, L_0)
+nnin_score_max <- function(E, n, logQ, L_0) {
+    .Call('_scistreer2_nnin_score_max', PACKAGE = 'scistreer2', E, n, logQ, L_0)
 }
 
 CgetQ <- function(logQ, children_dict, node_order) {
-    .Call('_scistreer_CgetQ', PACKAGE = 'scistreer', logQ, children_dict, node_order)
+    .Call('_scistreer2_CgetQ', PACKAGE = 'scistreer2', logQ, children_dict, node_order)
 }
 
 get_logQ <- function(E, P) {
-    .Call('_scistreer_get_logQ', PACKAGE = 'scistreer', E, P)
+    .Call('_scistreer2_get_logQ', PACKAGE = 'scistreer2', E, P)
 }
 
 score_tree_cpp <- function(E, P) {
-    .Call('_scistreer_score_tree_cpp', PACKAGE = 'scistreer', E, P)
-}
-
-get_score <- function(logQ, P) {
-    .Call('_scistreer_get_score', PACKAGE = 'scistreer', logQ, P)
-}
-
-nni_cpp_parallel_new <- function(tree, P) {
-    .Call('_scistreer_nni_cpp_parallel_new', PACKAGE = 'scistreer', tree, P)
+    .Call('_scistreer2_score_tree_cpp', PACKAGE = 'scistreer2', E, P)
 }
 
 nni_cpp_parallel <- function(tree, P) {
-    .Call('_scistreer_nni_cpp_parallel', PACKAGE = 'scistreer', tree, P)
+    .Call('_scistreer2_nni_cpp_parallel', PACKAGE = 'scistreer2', tree, P)
+}
+
+logSumExp <- function(x) {
+    .Call('_scistreer2_logSumExp', PACKAGE = 'scistreer2', x)
+}
+
+nnin_score_sum <- function(E, n, logQ, l_0) {
+    .Call('_scistreer2_nnin_score_sum', PACKAGE = 'scistreer2', E, n, logQ, l_0)
+}
+
+nni_cpp_parallel_sum <- function(tree, P) {
+    .Call('_scistreer2_nni_cpp_parallel_sum', PACKAGE = 'scistreer2', tree, P)
 }
 

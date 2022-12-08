@@ -6,7 +6,7 @@
 #' @importFrom ape root drop.tip nj ladderize
 #' @importFrom parallelDist parDist
 #' @importFrom stats na.omit reorder setNames
-#' @useDynLib scistreer
+#' @useDynLib scistreer2
 NULL
 
 #' Run the scistree workflow
@@ -20,7 +20,7 @@ NULL
 #' @examples
 #' tree_small = run_scistree(P_small)
 #' @export
-run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.01, verbose = TRUE) {
+run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.01, mode = 'max', verbose = TRUE) {
 
     RhpcBLASctl::blas_set_num_threads(1)
     RhpcBLASctl::omp_set_num_threads(1)
@@ -50,7 +50,7 @@ run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.0
         stop("init has be one of 'UPGMA', 'NJ'")
     }
 
-    tree_list = perform_nni(tree_init, P, ncores = ncores, max_iter = max_iter, eps = eps, verbose = verbose)
+    tree_list = perform_nni(tree_init, P, ncores = ncores, max_iter = max_iter, eps = eps, mode = mode, verbose = verbose)
 
     tree_final = tree_list[[length(tree_list)]]
 
@@ -75,7 +75,7 @@ run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.0
 #' @examples
 #' tree_list = perform_nni(tree_upgma, P_small)
 #' @export 
-perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, verbose = TRUE) {
+perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, mode = 'max', verbose = TRUE) {
 
     RhpcBLASctl::blas_set_num_threads(1)
     RhpcBLASctl::omp_set_num_threads(1)
@@ -97,8 +97,12 @@ perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, ver
         ptm = proc.time()
         
         RcppParallel::setThreadOptions(numThreads = ncores)
-        
-        scores = nni_cpp_parallel_new(tree_current, P)
+
+        if (mode == 'max') {
+            scores = nni_cpp_parallel(tree_current, P)
+        } else {
+            scores = nni_cpp_parallel_sum(tree_current, P)
+        }
         
         if (max(scores) > max_current + eps) {
             max_id = which.max(scores)

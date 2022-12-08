@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // allChildrenCPP
 std::vector<std::vector<int>> allChildrenCPP(const arma::Mat<int> E);
-RcppExport SEXP _scistreer_allChildrenCPP(SEXP ESEXP) {
+RcppExport SEXP _scistreer2_allChildrenCPP(SEXP ESEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -24,7 +24,7 @@ END_RCPP
 }
 // reorder_rows
 arma::Mat<int> reorder_rows(arma::Mat<int> x, arma::Col<int> y);
-RcppExport SEXP _scistreer_reorder_rows(SEXP xSEXP, SEXP ySEXP) {
+RcppExport SEXP _scistreer2_reorder_rows(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -36,7 +36,7 @@ END_RCPP
 }
 // reorderRcpp
 arma::Mat<int> reorderRcpp(arma::Mat<int> E);
-RcppExport SEXP _scistreer_reorderRcpp(SEXP ESEXP) {
+RcppExport SEXP _scistreer2_reorderRcpp(SEXP ESEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -47,7 +47,7 @@ END_RCPP
 }
 // nnin_cpp
 std::vector<arma::Mat<int>> nnin_cpp(const arma::Mat<int> E, const int n);
-RcppExport SEXP _scistreer_nnin_cpp(SEXP ESEXP, SEXP nSEXP) {
+RcppExport SEXP _scistreer2_nnin_cpp(SEXP ESEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -57,9 +57,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// nnin_score
-arma::vec nnin_score(const arma::Mat<int> E, const int n, arma::mat logQ, double L_0);
-RcppExport SEXP _scistreer_nnin_score(SEXP ESEXP, SEXP nSEXP, SEXP logQSEXP, SEXP L_0SEXP) {
+// nnin_score_max
+arma::vec nnin_score_max(const arma::Mat<int> E, const int n, arma::mat logQ, double L_0);
+RcppExport SEXP _scistreer2_nnin_score_max(SEXP ESEXP, SEXP nSEXP, SEXP logQSEXP, SEXP L_0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -67,13 +67,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type n(nSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type logQ(logQSEXP);
     Rcpp::traits::input_parameter< double >::type L_0(L_0SEXP);
-    rcpp_result_gen = Rcpp::wrap(nnin_score(E, n, logQ, L_0));
+    rcpp_result_gen = Rcpp::wrap(nnin_score_max(E, n, logQ, L_0));
     return rcpp_result_gen;
 END_RCPP
 }
 // CgetQ
 arma::mat CgetQ(arma::mat logQ, std::vector<std::vector<int>> children_dict, arma::Col<int> node_order);
-RcppExport SEXP _scistreer_CgetQ(SEXP logQSEXP, SEXP children_dictSEXP, SEXP node_orderSEXP) {
+RcppExport SEXP _scistreer2_CgetQ(SEXP logQSEXP, SEXP children_dictSEXP, SEXP node_orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -86,7 +86,7 @@ END_RCPP
 }
 // get_logQ
 arma::mat get_logQ(const arma::Mat<int> E, const arma::mat P);
-RcppExport SEXP _scistreer_get_logQ(SEXP ESEXP, SEXP PSEXP) {
+RcppExport SEXP _scistreer2_get_logQ(SEXP ESEXP, SEXP PSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -98,7 +98,7 @@ END_RCPP
 }
 // score_tree_cpp
 double score_tree_cpp(const arma::Mat<int> E, const arma::mat P);
-RcppExport SEXP _scistreer_score_tree_cpp(SEXP ESEXP, SEXP PSEXP) {
+RcppExport SEXP _scistreer2_score_tree_cpp(SEXP ESEXP, SEXP PSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -108,33 +108,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// get_score
-double get_score(const arma::mat logQ, const arma::mat P);
-RcppExport SEXP _scistreer_get_score(SEXP logQSEXP, SEXP PSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat >::type logQ(logQSEXP);
-    Rcpp::traits::input_parameter< const arma::mat >::type P(PSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_score(logQ, P));
-    return rcpp_result_gen;
-END_RCPP
-}
-// nni_cpp_parallel_new
-NumericVector nni_cpp_parallel_new(const List tree, arma::mat P);
-RcppExport SEXP _scistreer_nni_cpp_parallel_new(SEXP treeSEXP, SEXP PSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const List >::type tree(treeSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type P(PSEXP);
-    rcpp_result_gen = Rcpp::wrap(nni_cpp_parallel_new(tree, P));
-    return rcpp_result_gen;
-END_RCPP
-}
 // nni_cpp_parallel
 NumericVector nni_cpp_parallel(const List tree, arma::mat P);
-RcppExport SEXP _scistreer_nni_cpp_parallel(SEXP treeSEXP, SEXP PSEXP) {
+RcppExport SEXP _scistreer2_nni_cpp_parallel(SEXP treeSEXP, SEXP PSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -144,23 +120,61 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// logSumExp
+double logSumExp(const arma::vec& x);
+RcppExport SEXP _scistreer2_logSumExp(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(logSumExp(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// nnin_score_sum
+arma::vec nnin_score_sum(const arma::Mat<int> E, const int n, arma::mat logQ, arma::rowvec l_0);
+RcppExport SEXP _scistreer2_nnin_score_sum(SEXP ESEXP, SEXP nSEXP, SEXP logQSEXP, SEXP l_0SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::Mat<int> >::type E(ESEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type logQ(logQSEXP);
+    Rcpp::traits::input_parameter< arma::rowvec >::type l_0(l_0SEXP);
+    rcpp_result_gen = Rcpp::wrap(nnin_score_sum(E, n, logQ, l_0));
+    return rcpp_result_gen;
+END_RCPP
+}
+// nni_cpp_parallel_sum
+NumericVector nni_cpp_parallel_sum(const List tree, arma::mat P);
+RcppExport SEXP _scistreer2_nni_cpp_parallel_sum(SEXP treeSEXP, SEXP PSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List >::type tree(treeSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type P(PSEXP);
+    rcpp_result_gen = Rcpp::wrap(nni_cpp_parallel_sum(tree, P));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_scistreer_allChildrenCPP", (DL_FUNC) &_scistreer_allChildrenCPP, 1},
-    {"_scistreer_reorder_rows", (DL_FUNC) &_scistreer_reorder_rows, 2},
-    {"_scistreer_reorderRcpp", (DL_FUNC) &_scistreer_reorderRcpp, 1},
-    {"_scistreer_nnin_cpp", (DL_FUNC) &_scistreer_nnin_cpp, 2},
-    {"_scistreer_nnin_score", (DL_FUNC) &_scistreer_nnin_score, 4},
-    {"_scistreer_CgetQ", (DL_FUNC) &_scistreer_CgetQ, 3},
-    {"_scistreer_get_logQ", (DL_FUNC) &_scistreer_get_logQ, 2},
-    {"_scistreer_score_tree_cpp", (DL_FUNC) &_scistreer_score_tree_cpp, 2},
-    {"_scistreer_get_score", (DL_FUNC) &_scistreer_get_score, 2},
-    {"_scistreer_nni_cpp_parallel_new", (DL_FUNC) &_scistreer_nni_cpp_parallel_new, 2},
-    {"_scistreer_nni_cpp_parallel", (DL_FUNC) &_scistreer_nni_cpp_parallel, 2},
+    {"_scistreer2_allChildrenCPP", (DL_FUNC) &_scistreer2_allChildrenCPP, 1},
+    {"_scistreer2_reorder_rows", (DL_FUNC) &_scistreer2_reorder_rows, 2},
+    {"_scistreer2_reorderRcpp", (DL_FUNC) &_scistreer2_reorderRcpp, 1},
+    {"_scistreer2_nnin_cpp", (DL_FUNC) &_scistreer2_nnin_cpp, 2},
+    {"_scistreer2_nnin_score_max", (DL_FUNC) &_scistreer2_nnin_score_max, 4},
+    {"_scistreer2_CgetQ", (DL_FUNC) &_scistreer2_CgetQ, 3},
+    {"_scistreer2_get_logQ", (DL_FUNC) &_scistreer2_get_logQ, 2},
+    {"_scistreer2_score_tree_cpp", (DL_FUNC) &_scistreer2_score_tree_cpp, 2},
+    {"_scistreer2_nni_cpp_parallel", (DL_FUNC) &_scistreer2_nni_cpp_parallel, 2},
+    {"_scistreer2_logSumExp", (DL_FUNC) &_scistreer2_logSumExp, 1},
+    {"_scistreer2_nnin_score_sum", (DL_FUNC) &_scistreer2_nnin_score_sum, 4},
+    {"_scistreer2_nni_cpp_parallel_sum", (DL_FUNC) &_scistreer2_nni_cpp_parallel_sum, 2},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_scistreer(DllInfo *dll) {
+RcppExport void R_init_scistreer2(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
