@@ -1,3 +1,3 @@
-library(scistreer)
+library(scistreer2)
 
-testthat::test_check("scistreer")
+testthat::test_check("scistreer2")

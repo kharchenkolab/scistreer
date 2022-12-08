@@ -1,4 +1,4 @@
-library(scistreer)
+library(scistreer2)
 
 test_that("Small input works", {
     tree = run_scistree(P_small, verbose = F)
