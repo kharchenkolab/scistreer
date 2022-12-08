@@ -10,6 +10,7 @@ run_scistree(
   ncores = 1,
   max_iter = 100,
   eps = 0.01,
+  mode = "max",
   verbose = TRUE
 )
 }

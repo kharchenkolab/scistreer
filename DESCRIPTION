@@ -1,4 +1,4 @@
-Package: scistreer
+Package: scistreer2
 Title: Maximum-Likelihood Perfect Phylogeny Inference at Scale
 URL: https://github.com/kharchenkolab/scistreer,
     https://kharchenkolab.github.io/scistreer/

@@ -10,6 +10,7 @@ perform_nni(
   max_iter = 100,
   eps = 0.01,
   ncores = 1,
+  mode = "max",
   verbose = TRUE
 )
 }
