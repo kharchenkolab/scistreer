@@ -81,6 +81,8 @@ perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, ver
     RhpcBLASctl::omp_set_num_threads(1)
         
     converge = FALSE
+
+    tree_init = reorder(tree_init, order = 'postorder')
     
     i = 1
     max_current = -Inf
@@ -96,7 +98,7 @@ perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, ver
         
         RcppParallel::setThreadOptions(numThreads = ncores)
         
-        scores = nni_cpp_parallel(tree_current, P)
+        scores = nni_cpp_parallel_new(tree_current, P)
         
         if (max(scores) > max_current + eps) {
             max_id = which.max(scores)

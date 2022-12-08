@@ -130,6 +130,46 @@ std::vector<arma::Mat<int>> nnin_cpp(const arma::Mat<int> E, const int n) {
     return res;
 }
 
+// Computing the logQ matrix for the rearranged tree
+// [[Rcpp::export]]
+arma::vec nnin_score(const arma::Mat<int> E, const int n, arma::mat logQ, double L_0) {
+
+    arma::Col<int> parent = E.col(0);
+    arma::Col<int> child = E.col(1);
+    int k = min(parent) - 1;
+    arma::uvec indvec = find(child > k);
+    int ind = indvec[n-1];
+    int p1 = parent[ind];
+    int p2 = child[ind];
+    arma::uvec ind1_vec = find(parent == p1);
+    ind1_vec = ind1_vec.elem(find(ind1_vec != ind));
+    int ind1 = ind1_vec[0];
+    arma::uvec ind2 = find(parent == p2);
+    
+    int e1 = child[ind1];
+    int e2 = child[ind2[0]];
+    int e3 = child[ind2[1]];
+
+    arma::vec scores(2);
+
+    arma::mat logQ_1 = logQ;
+    arma::mat logQ_2 = logQ;
+    
+    logQ_1.row(p2-1) = logQ.row(e1-1) + logQ.row(e3-1);
+    logQ_2.row(p2-1) = logQ.row(e1-1) + logQ.row(e2-1);
+
+    int m = logQ.n_cols;
+
+    scores[0] = L_0;
+    scores[1] = L_0;
+
+    for (int i = 0; i < m; ++i) {
+        scores[0] += max(logQ_1.col(i));
+        scores[1] += max(logQ_2.col(i));
+    }
+
+    return scores;
+}
 
 /////////////////////////////////////// Scistree ////////////////////////////////////////
 
@@ -150,7 +190,7 @@ arma::mat CgetQ(arma::mat logQ, std::vector<std::vector<int>> children_dict, arm
 }
 
 // [[Rcpp::export]]
-double score_tree_cpp(const arma::Mat<int> E, const arma::mat P) {
+arma::mat get_logQ(const arma::Mat<int> E, const arma::mat P) {
 
     int n = P.n_rows;
     int m = P.n_cols;
@@ -172,11 +212,25 @@ double score_tree_cpp(const arma::Mat<int> E, const arma::mat P) {
 
     logQ = CgetQ(logQ, children_dict, node_order);
 
+    return logQ;
+}
+
+// [[Rcpp::export]]
+double score_tree_cpp(const arma::Mat<int> E, const arma::mat P) {
+
+    int m = P.n_cols;
+
+    double L_0 = accu(log(1-P));
+
+    arma::mat logQ = get_logQ(E, P);
+
     double l = 0;
 
     for (int i = 0; i < m; ++i) {
-        l += max(logQ.col(i)) + sum(logP_0.col(i));
+        l += max(logQ.col(i));
     }
+
+    l += L_0;
 
     return l;
 }
@@ -203,6 +257,72 @@ struct score_neighbours : public Worker {
         }
     }
 };
+
+struct score_neighbours_new : public Worker {
+
+    // original tree
+    const arma::Mat<int> E;
+
+    const arma::mat logQ;
+
+    const double L_0;
+
+    RVector<double> scores;
+
+    // initialize with source and destination
+    score_neighbours_new(const arma::Mat<int> E, const arma::mat logQ, const double L_0, NumericVector scores): 
+        E(E), logQ(logQ), L_0(L_0), scores(scores) {}
+
+    void operator()(std::size_t begin, std::size_t end) {
+        for (std::size_t i = begin; i < end; i++) {
+            arma::vec res = nnin_score(E, i+1, logQ, L_0);
+            scores[2*i] = res[0];
+            scores[2*i+1] = res[1];
+        }
+    }
+};
+
+// [[Rcpp::export]]
+double get_score(const arma::mat logQ, const arma::mat P) {
+
+    int m = logQ.n_cols;
+
+    double L_0 = accu(log(1-P));
+
+    double l = 0;
+
+    for (int i = 0; i < m; ++i) {
+        l += max(logQ.col(i));
+    }
+
+    l += L_0;
+
+    return(l);
+}
+
+// Note that the tree has to be already in post-order
+// [[Rcpp::export]]
+NumericVector nni_cpp_parallel_new(const List tree, arma::mat P) {
+    
+    arma::Mat<int> E = tree["edge"];
+
+    // E = reorderRcpp(E);
+
+    int n = E.n_rows/2 - 1;
+
+    arma::mat logQ = get_logQ(E, P);
+
+    double L_0 = accu(log(1-P));
+
+    NumericVector scores(2*n);
+
+    score_neighbours_new score_neighbours_new(E, logQ, L_0, scores);
+
+    parallelFor(0, n, score_neighbours_new);
+
+    return scores;
+
+}
 
 // [[Rcpp::export]]
 NumericVector nni_cpp_parallel(const List tree, arma::mat P) {

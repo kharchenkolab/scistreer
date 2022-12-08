@@ -17,12 +17,28 @@ nnin_cpp <- function(E, n) {
     .Call('_scistreer_nnin_cpp', PACKAGE = 'scistreer', E, n)
 }
 
+nnin_score <- function(E, n, logQ, L_0) {
+    .Call('_scistreer_nnin_score', PACKAGE = 'scistreer', E, n, logQ, L_0)
+}
+
 CgetQ <- function(logQ, children_dict, node_order) {
     .Call('_scistreer_CgetQ', PACKAGE = 'scistreer', logQ, children_dict, node_order)
 }
 
+get_logQ <- function(E, P) {
+    .Call('_scistreer_get_logQ', PACKAGE = 'scistreer', E, P)
+}
+
 score_tree_cpp <- function(E, P) {
     .Call('_scistreer_score_tree_cpp', PACKAGE = 'scistreer', E, P)
+}
+
+get_score <- function(logQ, P) {
+    .Call('_scistreer_get_score', PACKAGE = 'scistreer', logQ, P)
+}
+
+nni_cpp_parallel_new <- function(tree, P) {
+    .Call('_scistreer_nni_cpp_parallel_new', PACKAGE = 'scistreer', tree, P)
 }
 
 nni_cpp_parallel <- function(tree, P) {
