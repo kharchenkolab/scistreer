@@ -104,7 +104,7 @@ perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, mod
             scores = nni_cpp_parallel_sum(tree_current, P)
         }
         
-        if (max(scores) > max_current + eps) {
+        if (max(scores) >= max_current + eps) {
             max_id = which.max(scores)
             if (max_id %% 2 == 0) {pair_id = 2} else {pair_id = 1}
             tree_current$edge = matrix(nnin_cpp(tree_current$edge, ceiling(max_id/2))[[pair_id]], ncol = 2)
@@ -407,4 +407,51 @@ to_phylo = function(gtree) {
     phytree$root.edge = n_mut_root
     
     return(phytree)
+}
+
+
+run_mcmc = function(tree_a, P, max_iter = 1e3) {
+    
+    tree_a = reorder(tree_a, order = 'postorder')
+
+    trees = list()
+    likes = list()
+    
+    trees[[1]] = tree_a
+    l_a = scistreer:::score_tree_cpp(tree_a$edge, P)
+    likes[[1]] = l_a
+
+    for (i in 2:max_iter) {
+
+        # randomly pick neighbour
+        n = 1000
+        edge = sample(1:(n-2), size = 1)
+        side = sample(1:2, size = 1)
+
+        tree_b = phangorn:::nnin(tree_a, edge)[[side]]
+
+        tree_b = reorder(tree_b, order = 'postorder')
+
+        # acceptance probability
+        l_b = scistreer:::score_tree_cpp(tree_b$edge, P)
+        A = min(exp(l_b - l_a), 1)
+
+        move = as.logical(rbinom(n = 1, size = 1, prob = A))
+
+        if (move) {
+            # update tree
+            tree_a = tree_b
+            l_a = l_b
+
+            # keep trail
+            trees[[length(trees)+1]] = tree_a
+            likes[[length(likes)+1]] = l_a
+        }
+    }
+
+    class(trees) = 'multiPhylo'
+    likes = unlist(likes)
+    post = exp(likes - matrixStats::logSumExp(likes))
+    
+    return(list('likes' = likes, 'trees' = trees, 'post' = post))
 }
