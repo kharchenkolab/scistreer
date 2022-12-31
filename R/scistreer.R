@@ -54,8 +54,6 @@ run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.0
 
     tree_final = tree_list[[length(tree_list)]]
 
-    tree_final = ladderize(tree_final)
-
     # get the branch lengths
     tree_final$edge.length = rep(1, nrow(tree_final$edge))
 
