@@ -50,7 +50,7 @@ run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.0
         stop("init has be one of 'UPGMA', 'NJ'")
     }
 
-    tree_final = perform_nni(tree_init, P, ncores = ncores, max_iter = max_iter, eps = eps, mode = mode, verbose = verbose)
+    tree_final = perform_nni(tree_init, P, ncores = ncores, max_iter = max_iter, eps = eps, verbose = verbose)
 
     # unit branch lengths
     tree_final$edge.length = rep(1, nrow(tree_final$edge))
