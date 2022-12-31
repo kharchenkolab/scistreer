@@ -50,19 +50,14 @@ run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.0
         stop("init has be one of 'UPGMA', 'NJ'")
     }
 
-    tree_list = perform_nni(tree_init, P, ncores = ncores, max_iter = max_iter, eps = eps, verbose = verbose)
+    tree_final = perform_nni(tree_init, P, ncores = ncores, max_iter = max_iter, eps = eps, mode = mode, verbose = verbose)
 
-    tree_final = tree_list[[length(tree_list)]]
-
-    tree_final = ladderize(tree_final)
-
-    # get the branch lengths
+    # unit branch lengths
     tree_final$edge.length = rep(1, nrow(tree_final$edge))
 
     return(tree_final)
     
 }
-
 
 #' Maximum likelihood tree search via NNI
 #' @param tree_init phylo Intial tree
@@ -71,9 +66,9 @@ run_scistree = function(P, init = 'UPGMA', ncores = 1, max_iter = 100, eps = 0.0
 #' @param eps numeric Tolerance threshold in likelihood difference for stopping
 #' @param verbose logical Verbosity
 #' @param ncores integer Number of cores to use
-#' @return multiPhylo List of trees corresponding to the rearrangement steps
+#' @return phylo Final ML tree
 #' @examples
-#' tree_list = perform_nni(tree_upgma, P_small)
+#' tree_final = perform_nni(tree_upgma, P_small)
 #' @export 
 perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, verbose = TRUE) {
 
@@ -81,12 +76,12 @@ perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, ver
     RhpcBLASctl::omp_set_num_threads(1)
         
     converge = FALSE
+
+    tree_init = reorder(tree_init, order = 'postorder')
     
     i = 1
     max_current = -Inf
     tree_current = tree_init
-    tree_list = list()
-    tree_list[[1]] = tree_current
     
     while (!converge & i <= max_iter) {
         
@@ -95,15 +90,14 @@ perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, ver
         ptm = proc.time()
         
         RcppParallel::setThreadOptions(numThreads = ncores)
-        
+
         scores = nni_cpp_parallel(tree_current, P)
         
-        if (max(scores) > max_current + eps) {
+        if (max(scores) >= max_current + eps) {
             max_id = which.max(scores)
             if (max_id %% 2 == 0) {pair_id = 2} else {pair_id = 1}
             tree_current$edge = matrix(nnin_cpp(tree_current$edge, ceiling(max_id/2))[[pair_id]], ncol = 2)
-            tree_list[[i]] = tree_current
-            tree_list[[i]]$likelihood = max_current = max(scores)
+            max_current = scores[max_id]
             converge = FALSE
         } else {
             converge = TRUE
@@ -116,10 +110,8 @@ perform_nni = function(tree_init, P, max_iter = 100, eps = 0.01, ncores = 1, ver
             message(msg)
         }
     }
-    
-    class(tree_list) = 'multiPhylo'
-    
-    return(tree_list)
+        
+    return(tree_current)
 }
 
 #' Score a tree based on maximum likelihood
