@@ -2,7 +2,7 @@ Package: scistreer
 Title: Maximum-Likelihood Perfect Phylogeny Inference at Scale
 URL: https://github.com/kharchenkolab/scistreer,
     https://kharchenkolab.github.io/scistreer/
-Version: 1.0.2
+Version: 1.1.0
 Authors@R: c(person("Teng","Gao", email="tgaoteng@gmail.com", role=c("cre", "aut")), person("Evan", "Biederstedt", email="evan.biederstedt@gmail.com", role="aut"), person("Peter", "Kharchenko", email = "peter_kharchenko@hms.harvard.edu", role = "aut"), person("Yufeng", "Wu", email = "yufeng.wu@uconn.edu", role = "aut"))
 Description: Fast maximum-likelihood phylogeny inference from noisy single-cell data using the 'ScisTree' algorithm by Yufeng Wu (2019) <doi:10.1093/bioinformatics/btz676>. 'scistreer' provides an 'R' interface and improves speed via 'Rcpp' and 'RcppParallel', making the method applicable to massive single-cell datasets (>10,000 cells).
 License: GPL-3
