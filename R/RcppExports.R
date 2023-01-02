@@ -17,6 +17,10 @@ nnin_cpp <- function(E, n) {
     .Call('_scistreer_nnin_cpp', PACKAGE = 'scistreer', E, n)
 }
 
+node_depth <- function(ntip, e1, e2, nedge, xx, method) {
+    .Call('_scistreer_node_depth', PACKAGE = 'scistreer', ntip, e1, e2, nedge, xx, method)
+}
+
 CgetQ <- function(logQ, children_dict, node_order) {
     .Call('_scistreer_CgetQ', PACKAGE = 'scistreer', logQ, children_dict, node_order)
 }

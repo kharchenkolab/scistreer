@@ -2,18 +2,20 @@
 % Please edit documentation in R/scistreer.R
 \name{to_phylo}
 \alias{to_phylo}
-\title{Convert the phylogeny from tidygraph to phylo object}
+\title{Convert the phylogeny from tidygraph to phylo object
+modified from R package alakazam, converts a tbl_graph to a phylo object}
 \usage{
-to_phylo(gtree)
+to_phylo(graph)
 }
 \arguments{
-\item{gtree}{tbl_graph The single-cell phylogeny}
+\item{graph}{tbl_graph The single-cell phylogeny}
 }
 \value{
 phylo The single-cell phylogeny
 }
 \description{
 Convert the phylogeny from tidygraph to phylo object
+modified from R package alakazam, converts a tbl_graph to a phylo object
 }
 \examples{
 tree_small = to_phylo(annotate_tree(tree_small, P_small))

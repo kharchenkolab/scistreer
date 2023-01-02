@@ -34,4 +34,4 @@ NeedsCompilation: yes
 SystemRequirements: C++11, GNU make
 Author: Teng Gao [cre, aut], Evan Biederstedt [aut], Peter Kharchenko [aut], Yufeng Wu [aut]
 Maintainer: Teng Gao <tgaoteng@gmail.com>
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2

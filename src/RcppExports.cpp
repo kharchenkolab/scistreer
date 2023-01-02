@@ -57,6 +57,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// node_depth
+NumericVector node_depth(int ntip, NumericVector e1, NumericVector e2, int nedge, NumericVector xx, int method);
+RcppExport SEXP _scistreer_node_depth(SEXP ntipSEXP, SEXP e1SEXP, SEXP e2SEXP, SEXP nedgeSEXP, SEXP xxSEXP, SEXP methodSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ntip(ntipSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type e1(e1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type e2(e2SEXP);
+    Rcpp::traits::input_parameter< int >::type nedge(nedgeSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type xx(xxSEXP);
+    Rcpp::traits::input_parameter< int >::type method(methodSEXP);
+    rcpp_result_gen = Rcpp::wrap(node_depth(ntip, e1, e2, nedge, xx, method));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CgetQ
 arma::mat CgetQ(arma::mat logQ, std::vector<std::vector<int>> children_dict, arma::Col<int> node_order);
 RcppExport SEXP _scistreer_CgetQ(SEXP logQSEXP, SEXP children_dictSEXP, SEXP node_orderSEXP) {
@@ -100,6 +116,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scistreer_reorder_rows", (DL_FUNC) &_scistreer_reorder_rows, 2},
     {"_scistreer_reorderRcpp", (DL_FUNC) &_scistreer_reorderRcpp, 1},
     {"_scistreer_nnin_cpp", (DL_FUNC) &_scistreer_nnin_cpp, 2},
+    {"_scistreer_node_depth", (DL_FUNC) &_scistreer_node_depth, 6},
     {"_scistreer_CgetQ", (DL_FUNC) &_scistreer_CgetQ, 3},
     {"_scistreer_score_tree_cpp", (DL_FUNC) &_scistreer_score_tree_cpp, 2},
     {"_scistreer_nni_cpp_parallel", (DL_FUNC) &_scistreer_nni_cpp_parallel, 2},

@@ -3,7 +3,7 @@
 #' @import stringr
 #' @importFrom igraph vcount ecount E V V<- E<- 
 #' @importFrom phangorn upgma 
-#' @importFrom ape root drop.tip nj ladderize
+#' @importFrom ape root drop.tip nj
 #' @importFrom parallelDist parDist
 #' @importFrom stats na.omit reorder setNames
 #' @useDynLib scistreer
@@ -198,7 +198,6 @@ annotate_tree = function(tree, P) {
         )
 
     gtree = tree %>%
-        reorder(order = 'cladewise') %>%
         ladderize() %>%
         as_tbl_graph() %>%
         mutate(
@@ -385,19 +384,102 @@ transfer_links = function(G) {
 }
 
 #' Convert the phylogeny from tidygraph to phylo object
+#' modified from R package alakazam, converts a tbl_graph to a phylo object
 #'
-#' @param gtree tbl_graph The single-cell phylogeny
+#' @param graph tbl_graph The single-cell phylogeny
 #' @return phylo The single-cell phylogeny
 #' @examples
 #' tree_small = to_phylo(annotate_tree(tree_small, P_small))
 #' @export
-to_phylo = function(gtree) {
+to_phylo = function(graph) {
     
-    phytree = gtree %>% ape::as.phylo()
-    phytree$edge.length = gtree %>% activate(edges) %>% data.frame() %>% pull(length)
+    df  <- igraph::as_data_frame(graph)
+    node_counts <- table(c(df$to,df$from))
+    tips <- names(node_counts)[node_counts == 1]
+    nodes <- names(node_counts)[node_counts > 1]
+    attr <- igraph::vertex_attr(graph)
+
+    tipn <- 1:length(tips)
+    names(tipn) <- tips
+    noden <- (length(tips)+1):(length(tips)+length(nodes))
+    names(noden) <- nodes
+    renumber <- c(tipn,noden)
+
+    df$from <- as.numeric(renumber[df$from])
+    df$to <- as.numeric(renumber[df$to])    
+
+    phylo <- list()
+    phylo$edge <- matrix(cbind(df$from,df$to),ncol=2)
+    phylo$edge.length <- as.numeric(df$length)
+    phylo$tip.label <- tips
+    phylo$Nnode <- length(nodes)
+    class(phylo) <- "phylo"
+
+    nnodes <- length(renumber)
+    phylo$nodes <- lapply(1:nnodes,function(x){
+        n <- list()
+        n$id <- names(renumber[renumber == x])
+        n
+    })
     
-    n_mut_root = gtree %>% activate(nodes) %>% filter(node_is_root()) %>% pull(n_mut)
-    phytree$root.edge = n_mut_root
+    n_mut_root = graph %>% activate(nodes) %>% filter(node_is_root()) %>% pull(n_mut)
     
-    return(phytree)
+    phylo$root.edge = n_mut_root
+    
+    return(phylo)
+}
+
+
+#' from ape
+#' @keywords internal
+ladderize <- function(phy, right = TRUE) {
+    desc_fun <- function(x) {
+        parent <- x[, 1]
+        children <- x[, 2]
+        res <- vector("list", max(x))
+        for (i in seq_along(parent)) res[[parent[i]]] <- c(res[[parent[i]]], children[i])
+        return(res)
+    }
+
+    if(!is.null(phy$edge.length)){
+        el <- numeric(max(phy$edge))
+        el[phy$edge[, 2]] <- phy$edge.length
+    }
+
+    nb.tip <- length(phy$tip.label)
+    nb.node <- phy$Nnode
+    nb.edge <- dim(phy$edge)[1]
+
+    phy <- reorder(phy, "postorder")
+    N <- node_depth(as.integer(nb.tip), as.integer(phy$edge[, 1]), as.integer(phy$edge[, 2]),
+            as.integer(nb.edge), double(nb.tip + nb.node), 1L)
+
+    ii <- order(x <- phy$edge[,1], y <- N[phy$edge[,2]], decreasing = right)
+    desc <- desc_fun(phy$edge[ii,])
+
+    tmp <- integer(nb.node)
+    new_anc <- integer(nb.node)
+    new_anc[1] <- tmp[1] <- nb.tip + 1L
+    k <- nb.node
+    pos <- 1L
+
+    while(pos > 0L && k > 0){
+        current <- tmp[pos]
+        new_anc[k] <- current
+        k <- k - 1L
+        dc <- desc[[current]]
+        ind <- (dc > nb.tip)
+        if(any(ind)){
+            l <- sum(ind)
+            tmp[pos -1L + seq_len(l)] <-  dc[ind]
+            pos <- pos + l - 1L
+        }
+        else pos <- pos - 1L
+    }
+    edge <- cbind(rep(new_anc, lengths(desc[new_anc])), unlist(desc[new_anc]))
+    phy$edge <- edge
+    if(!is.null(phy$edge.length)) phy$edge.length <- el[edge[,2]]
+    attr(phy, "order") <- "postorder"
+    phy <- reorder(phy, "cladewise")
+    phy
 }
