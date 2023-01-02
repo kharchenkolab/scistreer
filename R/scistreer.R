@@ -198,6 +198,7 @@ annotate_tree = function(tree, P) {
         )
 
     gtree = tree %>%
+        ladderize() %>%
         as_tbl_graph() %>%
         mutate(
             leaf = node_is_leaf(),
