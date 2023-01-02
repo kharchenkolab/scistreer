@@ -2,6 +2,7 @@
 
 export(annotate_tree)
 export(get_mut_graph)
+export(ladderize)
 export(mut_to_tree)
 export(perform_nni)
 export(plot_phylo_heatmap)

@@ -430,8 +430,12 @@ to_phylo = function(graph) {
 }
 
 
-#' from ape
-#' @keywords internal
+#' From ape
+#' @param phy phylo The phylogeny
+#' @param right logical Whether ladderize to the right
+#' @examples
+#' tree_small = ladderize(tree_small)
+#' @export
 ladderize <- function(phy, right = TRUE) {
     desc_fun <- function(x) {
         parent <- x[, 1]
