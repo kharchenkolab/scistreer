@@ -430,7 +430,8 @@ to_phylo = function(graph) {
 }
 
 
-#' From ape
+#' From ape; will remove once new ape version is released
+#' https://github.com/emmanuelparadis/ape/issues/54
 #' @param phy phylo The phylogeny
 #' @param right logical Whether ladderize to the right
 #' @examples

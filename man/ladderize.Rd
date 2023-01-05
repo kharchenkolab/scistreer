@@ -2,7 +2,8 @@
 % Please edit documentation in R/scistreer.R
 \name{ladderize}
 \alias{ladderize}
-\title{From ape}
+\title{From ape; will remove once new ape version is released
+https://github.com/emmanuelparadis/ape/issues/54}
 \usage{
 ladderize(phy, right = TRUE)
 }
@@ -12,7 +13,8 @@ ladderize(phy, right = TRUE)
 \item{right}{logical Whether ladderize to the right}
 }
 \description{
-From ape
+From ape; will remove once new ape version is released
+https://github.com/emmanuelparadis/ape/issues/54
 }
 \examples{
 tree_small = ladderize(tree_small)
