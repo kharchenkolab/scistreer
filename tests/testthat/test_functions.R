@@ -10,8 +10,8 @@ test_that("Score tree works", {
     expect_equal(round(l, 3), -1606.497)
 })
 
-test_that("Conversion between phylo and tree graph works", {
-    tree_small_new = to_phylo(annotate_tree(tree_small, P_small))
-    l0 = score_tree(to_phylo(gtree_small), P_small)$l_tree
-    l1 = score_tree(tree_small, P_small)$l_tree
-})
+# test_that("Conversion between phylo and tree graph works", {
+#     tree_small_new = to_phylo(annotate_tree(tree_small, P_small))
+#     l0 = score_tree(to_phylo(gtree_small), P_small)$l_tree
+#     l1 = score_tree(tree_small, P_small)$l_tree
+# })

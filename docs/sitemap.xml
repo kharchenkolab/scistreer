@@ -25,10 +25,19 @@
     <loc>https://kharchenkolab.github.io/scistreer/reference/get_mut_graph.html</loc>
   </url>
   <url>
+    <loc>https://kharchenkolab.github.io/scistreer/reference/gtree_small.html</loc>
+  </url>
+  <url>
     <loc>https://kharchenkolab.github.io/scistreer/reference/index.html</loc>
   </url>
   <url>
     <loc>https://kharchenkolab.github.io/scistreer/reference/label_edges.html</loc>
+  </url>
+  <url>
+    <loc>https://kharchenkolab.github.io/scistreer/reference/ladderize.html</loc>
+  </url>
+  <url>
+    <loc>https://kharchenkolab.github.io/scistreer/reference/mut_nodes_small.html</loc>
   </url>
   <url>
     <loc>https://kharchenkolab.github.io/scistreer/reference/mut_to_tree.html</loc>
@@ -53,5 +62,8 @@
   </url>
   <url>
     <loc>https://kharchenkolab.github.io/scistreer/reference/tree_small.html</loc>
+  </url>
+  <url>
+    <loc>https://kharchenkolab.github.io/scistreer/reference/tree_upgma.html</loc>
   </url>
 </urlset>
