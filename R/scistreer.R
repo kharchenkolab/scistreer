@@ -512,7 +512,7 @@ cut_graph = function(G, tree, P) {
 
         Gp = delete_edges(G, e)
         vpar = get_vpar(Gp)
-        scores[[e]] = score_tree2(tree, P, vpar)$l_tree
+        scores[[e]] = score_tree_par(tree, P, vpar)$l_tree
         graphs[[e]] = Gp
 
     }
