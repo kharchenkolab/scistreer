@@ -269,10 +269,21 @@ mut_to_tree = function(gtree, mut_nodes) {
             map_bfs(node_is_root(),
             .f = function(path, ...) { paste0(na.omit(node_to_mut[path$node]), collapse = ',') })
             ),
+            # last_mut = unlist(
+            #     map_bfs(node_is_root(),
+            #     .f = function(path, ...) { 
+            #         past_muts = na.omit(node_to_mut[path$node])
+            #         if (length(past_muts) > 0) {
+            #             return(past_muts[length(past_muts)])
+            #         } else {
+            #             return('')
+            #         }
+            #     })
+            # )
             last_mut = unlist(
                 map_bfs(node_is_root(),
-                .f = function(path, ...) { 
-                    past_muts = na.omit(node_to_mut[path$node])
+                .f = function(path, node, ...) { 
+                    past_muts = na.omit(node_to_mut[c(path$node, node)])
                     if (length(past_muts) > 0) {
                         return(past_muts[length(past_muts)])
                     } else {
@@ -429,6 +440,134 @@ to_phylo = function(graph) {
     return(phylo)
 }
 
+sum_cols = function(X, cols) {
+    if (length(cols) == 1) {
+        return(X)
+    }
+    X = as.data.frame(X)
+    X[,paste0(cols, collapse = ',')] = rowSums(X[,cols,drop=FALSE])
+    X = X[,!colnames(X) %in% cols,drop=FALSE]
+    X = as.matrix(X)
+    return(X)
+}
+
+score_tree_par = function(tree, P, vpar = NULL, get_l_matrix = FALSE) {
+    
+    logP_0 = log(1 - P)
+    logP_1 = log(P)
+    sites = colnames(P)
+
+    if (!is.null(vpar)) {
+        for (vset in vpar) {
+            logP_0 = sum_cols(logP_0, vset)
+            logP_1 = sum_cols(logP_1, vset)
+        }
+    }
+    
+    tree = reorder(tree, order = "postorder")
+
+    n = nrow(logP_0)
+    m = ncol(logP_0)
+    
+    logQ = matrix(nrow = tree$Nnode * 2 + 1, ncol = m)
+    
+    node_order = c(tree$edge[, 2], n + 1)
+    node_order = node_order[node_order > n]
+    logQ[1:n, ] = logP_1 - logP_0
+    children_dict = allChildrenCPP(tree$edge)
+    logQ = CgetQ(logQ, children_dict, node_order)
+    
+    if (get_l_matrix) {
+        l_matrix = sweep(logQ, 2, colSums(logP_0), FUN = "+")
+        l_tree = sum(apply(l_matrix, 2, max))
+        colnames(l_matrix) = colnames(logP_0)
+    }
+    else {
+        l_matrix = NULL
+        l_tree = sum(apply(logQ, 2, max)) + sum(logP_0)
+    }
+    
+    return(list(l_tree = l_tree, logQ = logQ, l_matrix = l_matrix))
+}
+
+get_vpar = function(G) {
+    groups = setNames(components(G)$membership, V(G)$label)
+
+    vpar = lapply(unique(groups), function(g) {
+        vset = names(groups[groups == g]) %>% str_split(',') %>% unlist
+        vset = vset[vset != '']
+    })
+    
+    vpar = vpar[sapply(vpar, function(x){length(x)>0})]
+    
+    return(vpar)
+}
+
+cut_graph = function(G, tree, P) {
+    
+    graphs = list()
+    scores = list()
+
+    for (e in E(G)) {
+
+        Gp = delete_edges(G, e)
+        vpar = get_vpar(Gp)
+        scores[[e]] = score_tree2(tree, P, vpar)$l_tree
+        graphs[[e]] = Gp
+
+    }
+    
+    G_star = graphs[[which.max(unlist(scores))]]
+    
+    return(G_star)
+}
+
+simplify_phylo = function (tree, P, ncuts = 0) {
+
+    sites = colnames(P)
+    n = nrow(P)
+    gtree = annotate_tree(tree, P)
+    G = get_mut_graph(gtree)
+
+    l_matrix = score_tree(tree, P, get_l_matrix = TRUE)$l_matrix
+
+    colnames(l_matrix) = sites
+    Gp = G
+
+    if (ncuts == 0) {
+        vpar = list(sites)
+    } else {
+        for (i in 1:ncuts) {
+            message(i)
+            Gp = Gp %>% cut_graph(tree, P)
+        }
+        vpar = get_vpar(Gp)
+    }
+    
+    l_matrix = score_tree_par(tree, P, vpar, get_l_matrix = TRUE)$l_matrix
+
+    sites = colnames(l_matrix)
+
+    mut_nodes = data.frame(
+            site = sites, 
+            node_phylo = apply(l_matrix, 2, which.max), 
+            l = apply(l_matrix, 2, max)
+        ) %>%
+        mutate(name = ifelse(node_phylo <= n, tree$tip.label[node_phylo], paste0("Node", node_phylo - n))) %>%
+        group_by(name) %>%
+        summarise(site = paste0(sort(site), collapse = ","), n_mut = n(), l = sum(l), .groups = "drop")
+
+    gtree = tree %>% ladderize() %>% as_tbl_graph() %>%
+        mutate(leaf = node_is_leaf(), root = node_is_root(), depth = bfs_dist(root = 1), id = row_number())
+
+    gtree = gtree %>% activate(edges) %>% select(-any_of(c("leaf"))) %>% 
+        left_join(gtree %>% activate(nodes) %>% data.frame() %>% 
+        select(id, leaf), by = c(to = "id"))
+    
+    gtree = mut_to_tree(gtree, mut_nodes)
+
+    return(gtree)
+}
 
 #' From ape; will remove once new ape version is released
 #' https://github.com/emmanuelparadis/ape/issues/54
