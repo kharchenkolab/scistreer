@@ -522,30 +522,14 @@ cut_graph = function(G, tree, P) {
     return(G_star)
 }
 
-simplify_phylo = function (tree, P, ncuts = 0) {
+annotate_tree_par = function(tree, P, G) {
 
-    sites = colnames(P)
+    vpar = get_vpar(G)
+
     n = nrow(P)
-    gtree = annotate_tree(tree, P)
-    G = get_mut_graph(gtree)
 
-    l_matrix = score_tree(tree, P, get_l_matrix = TRUE)$l_matrix
-
-    colnames(l_matrix) = sites
-    Gp = G
-
-    if (ncuts == 0) {
-        vpar = list(sites)
-    } else {
-        for (i in 1:ncuts) {
-            message(i)
-            Gp = Gp %>% cut_graph(tree, P)
-        }
-        vpar = get_vpar(Gp)
-    }
-    
-    l_matrix = score_tree_par(tree, P, vpar, get_l_matrix = TRUE)$l_matrix
-
+    tree_stats = score_tree_par(tree, P, vpar, get_l_matrix = TRUE)
+    l_matrix = tree_stats$l_matrix
     sites = colnames(l_matrix)
 
     mut_nodes = data.frame(
@@ -566,7 +550,35 @@ simplify_phylo = function (tree, P, ncuts = 0) {
     
     gtree = mut_to_tree(gtree, mut_nodes)
 
+    gtree$likelihood = tree_stats$l_tree
+
     return(gtree)
+
+}
+
+get_graph_cuts = function(tree, P, ncuts = 0) {
+
+    sites = colnames(P)
+    gtree = annotate_tree(tree, P)
+    G = get_mut_graph(gtree)
+
+    ncuts = min(length(V(G))-1, ncuts)
+
+    l_matrix = score_tree(tree, P, get_l_matrix = TRUE)$l_matrix
+
+    colnames(l_matrix) = sites
+    Gp = G
+    graphs = list()
+
+    if (ncuts > 0) {
+        for (i in 1:ncuts) {
+            # message(i)
+            graphs[[i]] = Gp
+            Gp = Gp %>% cut_graph(tree, P)
+        }
+    }
+
+    return(graphs)
 }
 
 #' From ape; will remove once new ape version is released
