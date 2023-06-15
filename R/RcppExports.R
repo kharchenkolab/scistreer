@@ -21,8 +21,16 @@ node_depth <- function(ntip, e1, e2, nedge, xx, method) {
     .Call('_scistreer_node_depth', PACKAGE = 'scistreer', ntip, e1, e2, nedge, xx, method)
 }
 
+nnin_score_max <- function(E, n, logQ, L_0) {
+    .Call('_scistreer_nnin_score_max', PACKAGE = 'scistreer', E, n, logQ, L_0)
+}
+
 CgetQ <- function(logQ, children_dict, node_order) {
     .Call('_scistreer_CgetQ', PACKAGE = 'scistreer', logQ, children_dict, node_order)
+}
+
+get_logQ <- function(E, P) {
+    .Call('_scistreer_get_logQ', PACKAGE = 'scistreer', E, P)
 }
 
 score_tree_cpp <- function(E, P) {

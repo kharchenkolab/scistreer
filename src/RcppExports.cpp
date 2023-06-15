@@ -73,6 +73,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// nnin_score_max
+arma::vec nnin_score_max(const arma::Mat<int> E, const int n, arma::mat logQ, double L_0);
+RcppExport SEXP _scistreer_nnin_score_max(SEXP ESEXP, SEXP nSEXP, SEXP logQSEXP, SEXP L_0SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::Mat<int> >::type E(ESEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type logQ(logQSEXP);
+    Rcpp::traits::input_parameter< double >::type L_0(L_0SEXP);
+    rcpp_result_gen = Rcpp::wrap(nnin_score_max(E, n, logQ, L_0));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CgetQ
 arma::mat CgetQ(arma::mat logQ, std::vector<std::vector<int>> children_dict, arma::Col<int> node_order);
 RcppExport SEXP _scistreer_CgetQ(SEXP logQSEXP, SEXP children_dictSEXP, SEXP node_orderSEXP) {
@@ -83,6 +97,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<std::vector<int>> >::type children_dict(children_dictSEXP);
     Rcpp::traits::input_parameter< arma::Col<int> >::type node_order(node_orderSEXP);
     rcpp_result_gen = Rcpp::wrap(CgetQ(logQ, children_dict, node_order));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_logQ
+arma::mat get_logQ(const arma::Mat<int> E, const arma::mat P);
+RcppExport SEXP _scistreer_get_logQ(SEXP ESEXP, SEXP PSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::Mat<int> >::type E(ESEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type P(PSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_logQ(E, P));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -117,7 +143,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_scistreer_reorderRcpp", (DL_FUNC) &_scistreer_reorderRcpp, 1},
     {"_scistreer_nnin_cpp", (DL_FUNC) &_scistreer_nnin_cpp, 2},
     {"_scistreer_node_depth", (DL_FUNC) &_scistreer_node_depth, 6},
+    {"_scistreer_nnin_score_max", (DL_FUNC) &_scistreer_nnin_score_max, 4},
     {"_scistreer_CgetQ", (DL_FUNC) &_scistreer_CgetQ, 3},
+    {"_scistreer_get_logQ", (DL_FUNC) &_scistreer_get_logQ, 2},
     {"_scistreer_score_tree_cpp", (DL_FUNC) &_scistreer_score_tree_cpp, 2},
     {"_scistreer_nni_cpp_parallel", (DL_FUNC) &_scistreer_nni_cpp_parallel, 2},
     {NULL, NULL, 0}
