@@ -8,7 +8,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "wP5zrl+K/44ezMpby/v5WkoJVBaCQ0nDEJcqaPJTHI8"
+            - "SHA256:NmGTNFTP80gF2q6kdREsW+9gOwMG3PPVq5GZxf7bmD8"
       - checkout
       - run:
           name: Install package dependencies
