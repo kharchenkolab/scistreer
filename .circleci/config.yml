@@ -6,6 +6,9 @@ jobs:
     environment:
             _R_CHECK_FORCE_SUGGESTS_: false
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "wP5zrl+K/44ezMpby/v5WkoJVBaCQ0nDEJcqaPJTHI8"
       - checkout
       - run:
           name: Install package dependencies
